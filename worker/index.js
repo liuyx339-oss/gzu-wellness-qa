@@ -467,9 +467,17 @@ export default {
           return Response.json({ error: '请提供音频' }, { status: 400, headers: corsHeaders });
         }
 
-        const result = await env.AI.run('@cf/openai/whisper', {
-          audio: [...new Uint8Array(await audioFile.arrayBuffer())],
-        });
+        // Cloudflare Whisper input: { audio: string } where string is base64
+        const bytes = new Uint8Array(await audioFile.arrayBuffer());
+        // 安全编码 base64
+        let base64 = '';
+        const chunkSize = 4096;
+        for (let i = 0; i < bytes.length; i += chunkSize) {
+          const chunk = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
+          base64 += btoa(String.fromCharCode.apply(null, chunk));
+        }
+
+        const result = await env.AI.run('@cf/openai/whisper', { audio: base64 });
         return Response.json({ text: result.text || '' }, { headers: corsHeaders });
 
       } catch (err) {
