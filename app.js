@@ -194,12 +194,12 @@ document.querySelectorAll('.example').forEach(el => {
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let isRecording = false;
 let recognition = null;
+let noSpeechRetries = 0;
 
 if (SpeechRecognition) {
   recognition = new SpeechRecognition();
   recognition.lang = 'zh-CN';
   recognition.interimResults = true;
-  recognition.continuous = false;
 
   recognition.onresult = (event) => {
     let transcript = '';
@@ -207,6 +207,7 @@ if (SpeechRecognition) {
       transcript += event.results[i][0].transcript;
     }
     questionInput.value = transcript;
+    noSpeechRetries = 0;
   };
 
   recognition.onend = () => {
@@ -216,9 +217,25 @@ if (SpeechRecognition) {
   };
 
   recognition.onerror = (event) => {
+    if (event.error === 'no-speech' && noSpeechRetries < 5) {
+      // 用户还没说话，自动重试
+      noSpeechRetries++;
+      setTimeout(() => {
+        if (!isRecording && noSpeechRetries <= 5) {
+          try { recognition.start(); micBtn.classList.add('recording'); micBtn.textContent = '🔴'; isRecording = true; } catch(e) {}
+        }
+      }, 300);
+      return;
+    }
     micBtn.classList.remove('recording');
     micBtn.textContent = '🎤';
     isRecording = false;
+    noSpeechRetries = 0;
+    if (event.error === 'not-allowed') {
+      alert('请允许浏览器使用麦克风\n\n点击地址栏左侧锁图标 → 网站设置 → 允许麦克风');
+    } else if (event.error !== 'aborted') {
+      console.log('Speech error:', event.error);
+    }
   };
 } else {
   micBtn.style.display = 'none';
@@ -229,10 +246,16 @@ micBtn.addEventListener('click', () => {
   if (isRecording) {
     recognition.stop();
   } else {
-    recognition.start();
-    micBtn.classList.add('recording');
-    micBtn.textContent = '🔴';
-    isRecording = true;
+    questionInput.value = '';
+    noSpeechRetries = 0;
+    try {
+      recognition.start();
+      micBtn.classList.add('recording');
+      micBtn.textContent = '🔴';
+      isRecording = true;
+    } catch(e) {
+      alert('语音启动失败: ' + e.message);
+    }
   }
 });
 
