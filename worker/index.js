@@ -468,8 +468,16 @@ export default {
         }
         const audioBytes = new Uint8Array(await audio.arrayBuffer());
 
-        const result = await env.AI.run('@cf/openai/whisper-large-v3-turbo', {
-          audio: [...audioBytes],
+        // Cloudflare AI Whisper 期望 audio 为 base64 字符串
+        let base64 = '';
+        const chunk = 0x8000;
+        for (let i = 0; i < audioBytes.length; i += chunk) {
+          base64 += String.fromCharCode.apply(null, audioBytes.subarray(i, i + chunk));
+        }
+        base64 = btoa(base64);
+
+        const result = await env.AI.run('@cf/openai/whisper', {
+          audio: base64,
           task: 'transcribe',
           language: 'zh',
         });
