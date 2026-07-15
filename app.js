@@ -190,75 +190,82 @@ document.querySelectorAll('.example').forEach(el => {
   });
 });
 
-// ===== Voice Input (Web Speech API) =====
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// ===== Voice Input (录音 + Worker 转文字) =====
 let isRecording = false;
-let recognition = null;
-let noSpeechRetries = 0;
+let mediaRecorder = null;
+let audioChunks = [];
 
-if (SpeechRecognition) {
-  recognition = new SpeechRecognition();
-  recognition.lang = 'zh-CN';
-  recognition.interimResults = true;
-
-  recognition.onresult = (event) => {
-    let transcript = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      transcript += event.results[i][0].transcript;
-    }
-    questionInput.value = transcript;
-    noSpeechRetries = 0;
-  };
-
-  recognition.onend = () => {
-    micBtn.classList.remove('recording');
-    micBtn.textContent = '🎤';
-    isRecording = false;
-  };
-
-  recognition.onerror = (event) => {
-    if (event.error === 'no-speech' && noSpeechRetries < 5) {
-      // 用户还没说话，自动重试
-      noSpeechRetries++;
-      setTimeout(() => {
-        if (!isRecording && noSpeechRetries <= 5) {
-          try { recognition.start(); micBtn.classList.add('recording'); micBtn.textContent = '🔴'; isRecording = true; } catch(e) {}
-        }
-      }, 300);
-      return;
-    }
-    micBtn.classList.remove('recording');
-    micBtn.textContent = '🎤';
-    isRecording = false;
-    noSpeechRetries = 0;
-    if (event.error === 'not-allowed') {
-      alert('请允许浏览器使用麦克风\n\n点击地址栏左侧锁图标 → 网站设置 → 允许麦克风');
-    } else if (event.error !== 'aborted') {
-      console.log('Speech error:', event.error);
-    }
-    // 网络错误常见于国内访问不了 Google 语音服务
-    if (event.error === 'network') {
-      alert('语音识别需要访问 Google 服务，可能被网络屏蔽。请尝试：\n1. 使用 VPN\n2. 或直接打字输入');
-    }
-  };
-} else {
-  micBtn.style.display = 'none';
-}
-
-micBtn.addEventListener('click', () => {
-  if (!recognition) return;
+micBtn.addEventListener('click', async () => {
   if (isRecording) {
-    recognition.stop();
-  } else {
-    questionInput.value = '';
-    noSpeechRetries = 0;
-    try {
-      recognition.start();
-      micBtn.classList.add('recording');
-      micBtn.textContent = '🔴';
-      isRecording = true;
-    } catch(e) {
-      alert('语音启动失败: ' + e.message);
+    // Stop recording
+    mediaRecorder.stop();
+    micBtn.classList.remove('recording');
+    micBtn.textContent = '⏳';
+    micBtn.disabled = true;
+    return;
+  }
+
+  // Start recording
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      // Stop all tracks
+      stream.getTracks().forEach(t => t.stop());
+
+      if (audioChunks.length === 0) {
+        micBtn.textContent = '🎤';
+        micBtn.disabled = false;
+        return;
+      }
+
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      const { apiKey } = getConfig();
+
+      try {
+        const form = new FormData();
+        form.append('audio', audioBlob, 'recording.webm');
+
+        const resp = await fetch(`${WORKER_URL}/api/speech-to-text`, {
+          method: 'POST',
+          headers: apiKey ? { 'X-API-Key': apiKey } : {},
+          body: form,
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          throw new Error(err.error || '识别失败');
+        }
+
+        const data = await resp.json();
+        questionInput.value = data.text || '';
+        questionInput.style.height = 'auto';
+        questionInput.style.height = Math.min(questionInput.scrollHeight, 120) + 'px';
+
+      } catch (err) {
+        alert('语音识别失败: ' + err.message + '\n\n请确保已配置 API Key（点击右上角⚙️设置）');
+      } finally {
+        micBtn.textContent = '🎤';
+        micBtn.disabled = false;
+      }
+    };
+
+    mediaRecorder.start();
+    micBtn.classList.add('recording');
+    micBtn.textContent = '🔴';
+    isRecording = true;
+
+  } catch (err) {
+    if (err.name === 'NotAllowedError') {
+      alert('请允许浏览器使用麦克风\n点击地址栏左侧锁图标 → 网站设置 → 允许麦克风');
+    } else {
+      alert('麦克风启动失败: ' + err.message);
     }
   }
 });

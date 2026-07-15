@@ -452,6 +452,53 @@ export default {
 
     const url = new URL(request.url);
 
+    // ===== 路由 /api/speech-to-text =====
+    if (url.pathname === '/api/speech-to-text' && request.method === 'POST') {
+      try {
+        const apiKey = request.headers.get('X-API-Key') || env.AI_API_KEY;
+        if (!apiKey) {
+          return Response.json({ error: '请配置 API Key（点击右上角⚙️设置）' }, { status: 401, headers: { 'Access-Control-Allow-Origin': '*' } });
+        }
+
+        const formData = await request.formData();
+        const audio = formData.get('audio');
+        if (!audio) {
+          return Response.json({ error: '请提供音频文件' }, { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
+        }
+
+        // 调 OpenAI Whisper API
+        const whisperForm = new FormData();
+        whisperForm.append('file', audio, 'recording.webm');
+        whisperForm.append('model', 'whisper-1');
+        whisperForm.append('language', 'zh');
+
+        const whisperResp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${apiKey}` },
+          body: whisperForm,
+        });
+
+        const whisperData = await whisperResp.json();
+
+        if (!whisperResp.ok) {
+          const errMsg = whisperData.error?.message || '识别失败';
+          if (whisperResp.status === 401) {
+            return Response.json({
+              error: 'API Key 不支持语音识别。DeepSeek 的 Key 无法用 OpenAI Whisper。请在设置中添加一个 OpenAI API Key',
+            }, { status: 401, headers: { 'Access-Control-Allow-Origin': '*' } });
+          }
+          return Response.json({ error: errMsg }, { status: whisperResp.status, headers: { 'Access-Control-Allow-Origin': '*' } });
+        }
+
+        return Response.json({ text: whisperData.text || '' }, {
+          headers: { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' },
+        });
+
+      } catch (err) {
+        return Response.json({ error: err.message }, { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } });
+      }
+    }
+
     // ===== 路由 /api/debug（调试：只看搜索不打AI）=====
     if (url.pathname === '/api/debug' && request.method === 'POST') {
       try {
