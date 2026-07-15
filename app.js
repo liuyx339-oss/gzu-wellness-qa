@@ -236,6 +236,10 @@ if (SpeechRecognition) {
     } else if (event.error !== 'aborted') {
       console.log('Speech error:', event.error);
     }
+    // 网络错误常见于国内访问不了 Google 语音服务
+    if (event.error === 'network') {
+      alert('语音识别需要访问 Google 服务，可能被网络屏蔽。请尝试：\n1. 使用 VPN\n2. 或直接打字输入');
+    }
   };
 } else {
   micBtn.style.display = 'none';
