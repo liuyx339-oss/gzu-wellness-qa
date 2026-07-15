@@ -34,12 +34,21 @@ const chatArea = document.getElementById('chatArea');
 const emptyState = document.getElementById('emptyState');
 const loading = document.getElementById('loading');
 const btnSettings = document.getElementById('btnSettings');
+const btnAdd = document.getElementById('btnAdd');
 const settingsPanel = document.getElementById('settingsPanel');
+const addPanel = document.getElementById('addPanel');
 const apiBadge = document.getElementById('apiBadge');
 const apiProvider = document.getElementById('apiProvider');
 const apiKeyInput = document.getElementById('apiKey');
 const btnSave = document.getElementById('btnSave');
 const btnClear = document.getElementById('btnClear');
+// Add knowledge
+const btnAddSave = document.getElementById('btnAddSave');
+const addQuestion = document.getElementById('addQuestion');
+const addAnswer = document.getElementById('addAnswer');
+const addTitle = document.getElementById('addTitle');
+const addContent = document.getElementById('addContent');
+const addStatus = document.getElementById('addStatus');
 
 // ===== Settings UI =====
 function updateBadge() {
@@ -56,6 +65,74 @@ function syncFormFromConfig() {
     link.style.display = link.dataset.provider === provider ? 'inline' : 'none';
   });
 }
+
+// ===== Panel Toggle =====
+btnSettings.addEventListener('click', () => {
+  const isOpen = !settingsPanel.classList.contains('hidden');
+  settingsPanel.classList.toggle('hidden', isOpen);
+  addPanel.classList.add('hidden');
+});
+
+btnAdd.addEventListener('click', () => {
+  const isOpen = !addPanel.classList.contains('hidden');
+  addPanel.classList.toggle('hidden', isOpen);
+  settingsPanel.classList.add('hidden');
+});
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    document.getElementById('tab-' + tab.dataset.tab).classList.remove('hidden');
+  });
+});
+
+// Submit knowledge
+btnAddSave.addEventListener('click', async () => {
+  const activeTab = document.querySelector('.tab.active').dataset.tab;
+  let body;
+
+  if (activeTab === 'qa') {
+    const q = addQuestion.value.trim();
+    const a = addAnswer.value.trim();
+    if (!q || !a) { addStatus.className = 'add-status error'; addStatus.textContent = '请填写问题和答案'; return; }
+    body = { type: 'qa', question: q, answer: a };
+  } else {
+    const c = addContent.value.trim();
+    if (!c) { addStatus.className = 'add-status error'; addStatus.textContent = '请填写知识内容'; return; }
+    body = { type: 'text', title: addTitle.value.trim() || '用户添加', content: c };
+  }
+
+  btnAddSave.disabled = true;
+  addStatus.className = 'add-status';
+  addStatus.textContent = '⏳ 正在提交...';
+
+  try {
+    const resp = await fetch(`${WORKER_URL}/api/add-knowledge`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await resp.json();
+    if (resp.ok && data.ok) {
+      addStatus.className = 'add-status success';
+      addStatus.textContent = '✅ ' + data.message;
+
+      // Clear form
+      if (activeTab === 'qa') { addQuestion.value = ''; addAnswer.value = ''; }
+      else { addTitle.value = ''; addContent.value = ''; }
+    } else {
+      throw new Error(data.error || '提交失败');
+    }
+  } catch (err) {
+    addStatus.className = 'add-status error';
+    addStatus.textContent = '❌ ' + err.message;
+  } finally {
+    btnAddSave.disabled = false;
+  }
+});
 
 btnSettings.addEventListener('click', () => {
   const isOpen = !settingsPanel.classList.contains('hidden');

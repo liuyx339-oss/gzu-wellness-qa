@@ -12,12 +12,11 @@
     <header class="header">
       <h1>📚 AI 知识库问答</h1>
       <p class="subtitle">基于飞书文档的智能问答助手</p>
-      <button class="btn-settings" id="btnSettings" title="API 设置">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-        </svg>
-      </button>
-      <span class="api-badge" id="apiBadge" style="display:none">⚡已配置</span>
+      <div class="header-actions">
+        <button class="btn-header" id="btnAdd">📝 添加知识</button>
+        <button class="btn-header" id="btnSettings">⚙️ 设置</button>
+        <span class="api-badge" id="apiBadge" style="display:none">⚡已配置</span>
+      </div>
     </header>
 
     <!-- API Settings Panel -->
@@ -47,6 +46,40 @@
           <button class="btn-clear" id="btnClear">🗑 清除</button>
         </div>
         <p class="settings-hint">🔒 API Key 仅保存在你的浏览器 localStorage 中，不会上传到服务器</p>
+      </div>
+    </div>
+
+    <!-- Add Knowledge Panel -->
+    <div class="settings-panel hidden" id="addPanel">
+      <div class="settings-card">
+        <h3>📝 添加知识</h3>
+        <p class="settings-desc">填写后提交，约 1 分钟后所有人可搜索到</p>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="qa">Q&A 问答</button>
+          <button class="tab" data-tab="text">自由文本</button>
+        </div>
+
+        <div class="tab-content" id="tab-qa">
+          <label for="addQuestion">问题</label>
+          <input type="text" id="addQuestion" placeholder="例如：微压氧舱多久做一次？">
+
+          <label for="addAnswer">答案</label>
+          <textarea id="addAnswer" rows="4" placeholder="写下你的回答..."></textarea>
+        </div>
+
+        <div class="tab-content hidden" id="tab-text">
+          <label for="addTitle">标题（可选）</label>
+          <input type="text" id="addTitle" placeholder="例如：新员工手册">
+
+          <label for="addContent">内容</label>
+          <textarea id="addContent" rows="5" placeholder="粘贴或输入知识内容..."></textarea>
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn-save" id="btnAddSave">📤 提交到知识库</button>
+        </div>
+        <p class="add-status" id="addStatus"></p>
       </div>
     </div>
 

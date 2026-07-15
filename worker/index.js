@@ -22,9 +22,15 @@ const AI_PROVIDER = 'deepseek'; // 'deepseek' | 'openai' | 'anthropic'
 
 // API 端点
 const DEEPSEEK_API = 'https://api.deepseek.com/chat/completions';
-const DEEPSEEK_MODEL = 'deepseek-chat';  // 或 'deepseek-reasoner' (R1)
+const DEEPSEEK_MODEL = 'deepseek-chat';
 const OPENAI_API = 'https://api.openai.com/v1/chat/completions';
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
+
+// GitHub 配置（用于写入知识库）
+const GITHUB_OWNER = 'liuyx339-oss';
+const GITHUB_REPO = 'gzu-wellness-qa';
+const GITHUB_FILE = 'data/chunks.json';
+let cachedChunksSHA = null;  // 当前 chunks.json 的 GitHub SHA
 
 // 知识库 chunks 的 GitHub raw URL
 // 格式: https://raw.githubusercontent.com/{owner}/{repo}/main/data/chunks.json
@@ -245,7 +251,7 @@ async function generateAnswer(apiKey, provider, systemPrompt, question) {
 
 let chunksCache = null;
 let chunksCacheTime = 0;
-const CACHE_TTL = 3600 * 1000; // 1小时缓存
+const CACHE_TTL = 60 * 1000; // 1分钟缓存（即时生效）
 
 async function getChunks(env) {
   const now = Date.now();
@@ -268,6 +274,60 @@ async function getChunks(env) {
 }
 
 // ============================================================
+// GitHub API — 写入知识库
+// ============================================================
+
+async function appendChunkToGitHub(env, chunk) {
+  const token = env.GITHUB_PAT;
+  if (!token) throw new Error('GitHub PAT 未配置');
+
+  const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+
+  // Step 1: 读取当前文件
+  console.log('Fetching current chunks.json from GitHub...');
+  const getResp = await fetch(apiUrl, {
+    headers: { Authorization: `Bearer ${token}`, 'User-Agent': 'gzu-wellness-qa' },
+  });
+  if (!getResp.ok) throw new Error(`GitHub GET 失败: ${getResp.status}`);
+
+  const fileData = await getResp.json();
+  const content = JSON.parse(atob(fileData.content));
+  const sha = fileData.sha;
+
+  // Step 2: 追加 chunk
+  const maxId = content.reduce((m, c) => Math.max(m, c.id || 0), 0);
+  chunk.id = maxId + 1;
+  content.push(chunk);
+
+  // Step 3: 写回
+  const newContent = JSON.stringify(content, null, 2);
+  console.log(`Writing chunks.json (${content.length} chunks, ${newContent.length} bytes)...`);
+
+  const putResp = await fetch(apiUrl, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}`, 'User-Agent': 'gzu-wellness-qa' },
+    body: JSON.stringify({
+      message: `📝 添加知识: ${(chunk.title || '新内容').substring(0, 50)}`,
+      content: btoa(unescape(encodeURIComponent(newContent))),
+      sha,
+    }),
+  });
+
+  if (!putResp.ok) {
+    const err = await putResp.text();
+    throw new Error(`GitHub PUT 失败: ${putResp.status} ${err}`);
+  }
+
+  // 清除缓存，下次请求会重新从 raw URL 加载
+  chunksCache = null;
+  chunksCacheTime = 0;
+  cachedChunksSHA = null;
+
+  console.log('✅ 知识已添加');
+  return chunk;
+}
+
+// ============================================================
 // Worker 入口
 // ============================================================
 
@@ -285,18 +345,66 @@ export default {
       });
     }
 
-    // 只处理 /api/ask
     const url = new URL(request.url);
+
+    // ===== 路由 /api/add-knowledge =====
+    if (url.pathname === '/api/add-knowledge' && request.method === 'POST') {
+      try {
+        const body = await request.json();
+        const type = body.type || 'qa';
+        let chunk = {};
+
+        if (type === 'qa') {
+          const q = body.question?.trim();
+          const a = body.answer?.trim();
+          if (!q || !a) {
+            return Response.json({ error: '请提供 question 和 answer' }, {
+              status: 400,
+              headers: { 'Access-Control-Allow-Origin': '*' },
+            });
+          }
+          chunk = {
+            title: 'user_用户添加',
+            content: `## Q: ${q}\n\n${a}`,
+            tokens_est: Math.floor((q.length + a.length) / 2),
+          };
+        } else {
+          const c = body.content?.trim();
+          if (!c) {
+            return Response.json({ error: '请提供 content' }, {
+              status: 400,
+              headers: { 'Access-Control-Allow-Origin': '*' },
+            });
+          }
+          chunk = {
+            title: body.title || 'user_用户添加',
+            content: c.substring(0, 5000),
+            tokens_est: Math.floor(c.length / 2),
+          };
+        }
+
+        await appendChunkToGitHub(env, chunk);
+
+        return Response.json({ ok: true, message: '知识已添加，约1分钟后可搜索到' }, {
+          headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json; charset=utf-8' },
+        });
+
+      } catch (err) {
+        console.error('Add knowledge error:', err);
+        return Response.json({ error: `添加失败: ${err.message}` }, {
+          status: 500,
+          headers: { 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+    }
+
+    // ===== 路由 /api/ask =====
     if (url.pathname !== '/api/ask' || request.method !== 'POST') {
-      return new Response(JSON.stringify({
-        error: '请使用 POST /api/ask',
-        usage: { question: '你的问题' },
-      }), {
+      return Response.json({
+        error: '请使用 POST /api/ask 或 POST /api/add-knowledge',
+      }, {
         status: 404,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        headers: { 'Access-Control-Allow-Origin': '*' },
       });
     }
 
