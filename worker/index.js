@@ -44,77 +44,178 @@ const MAX_CONTEXT = 8000; // 最大上下文字符数
 // 文本相似度计算（基于关键词 Jaccard + TF 的简单检索）
 // ============================================================
 
+// ============================================================
+// 同义词词典 —— 将口语化查询词扩展为专业术语
+// ============================================================
+const SYNONYM_MAP = {
+  // 口语 → 专业术语
+  "打针": "能量针 静脉输注 IV营养疗法",
+  "打营养针": "能量针 IV营养疗法 静脉输注",
+  "打点滴": "静脉输注 IV营养疗法 能量针",
+  "输液": "静脉输注 IV营养疗法 能量针",
+  "熬夜": "睡眠 疲劳 肝脏 作息",
+  "喝酒": "酒精 肝脏 解毒 护肝",
+  "应酬": "肝脏 酒精 护肝 解毒",
+  "美白": "谷胱甘肽 维C 提亮 肤色",
+  "疲劳": "疲劳 乏力 精力 能量 免疫力",
+  "累": "疲劳 乏力 精力差 能量",
+  "胖": "代谢 脂肪 体重 减重",
+  "老": "抗衰老 抗衰 衰老 年轻",
+  "免疫": "免疫力 免疫 抵抗力 胸腺法新",
+  "免疫力差": "免疫力 免疫强化 抵抗力差 胸腺法新 免疫球蛋白",
+  "肝": "肝脏 护肝 解毒 肝功能 谷胱甘肽 乙酰半胱氨酸",
+  "肾": "肾脏 排毒 代谢",
+  "睡眠": "睡眠 失眠 深眠 磁疗 rTMS",
+  "失眠": "深眠 磁疗 rTMS 睡眠质量",
+  "过敏": "过敏 免疫 免疫力 检测",
+  "头痛": "头痛 偏头痛 神经系统 脑",
+  "头晕": "头晕 眩晕 供血 脑循环",
+  "关节": "关节 骨代谢 骨骼 疼痛",
+  "体检": "检测 评估 套餐 健康评估",
+  "基因": "基因检测 全外显子 外显子 测序",
+  "维生素": "维生素检测 全套维生素 营养",
+  "减肥": "代谢 减重 脂肪 左卡尼汀",
+  "运动": "运动恢复 水合 电解质 能量 耐力",
+  "男士": "男性 men energy 男",
+  "女士": "女性 women female 女",
+  "压力": "压力 紧张 焦虑 睡眠 脑",
+  "记忆力": "记忆力 脑 认知 脑活素 神经",
+  "皮肤": "皮肤 基因 检测 美容",
+  "消炎": "抗炎 炎症 免疫 氧化",
+  "癌症": "肿瘤 基因 检测 早筛 风险",
+  "备孕": "备孕 生育 基因 遗传",
+  "心脏": "心脏 体外反搏 心脏活力 心血管",
+  "耳鸣": "耳鸣 微循环 供血 体外反搏",
+};
+
+// 核心关键词列表（用于权重加分）
+const KEYWORD_WEIGHTS = {
+  "nad+": 3, "nad": 2, "能量针": 2.5, "vitaglow": 3, "proboost": 3,
+  "coreboost": 3, "hydromax": 3, "menergy": 3, "coretein": 3,
+  "neurogenex": 3, "微压氧": 2.5, "深眠": 2.5, "rtms": 2.5,
+  "血浆置换": 2.5, "tpe": 2.5, "基因": 2, "维生素": 2,
+  "价格": 1.5, "套餐": 1.5, "免疫": 2, "肝脏": 2, "谷胱甘肽": 2,
+  "胸腺法新": 2, "白蛋白": 2, "脑活素": 2.5, "菲": 2,
+  "女性": 2, "男性": 2, "检测": 1.5, "输注": 2,
+};
+
 /**
- * 中文分词（简单实现：按常见词边界切分）
+ * 扩展查询：将口语词替换为同义词
  */
-function tokenize(text) {
-  // 移除 Markdown 标记和标点
+function expandQuery(query) {
+  const lower = query.toLowerCase();
+  let expanded = query;
+
+  for (const [term, synonyms] of Object.entries(SYNONYM_MAP)) {
+    if (lower.includes(term)) {
+      expanded += ' ' + synonyms;
+    }
+  }
+
+  return expanded;
+}
+
+/**
+ * 提取关键词（2-4字中文词 + 英文单词）
+ */
+function extractKeywords(text) {
   const cleaned = text
-    .replace(/[#*_~`>|-]/g, ' ')
-    .replace(/[，。！？、；：""''（）【】《》\s]+/g, ' ')
-    .trim()
-    .toLowerCase();
+    .replace(/[#*_~`>\-|【】《》（）\s]+/g, ' ')
+    .toLowerCase()
+    .trim();
 
-  // 提取中文词组（2-4字）和英文单词
-  const tokens = [];
-  const words = cleaned.split(/\s+/);
+  const tokens = new Set();
 
-  for (const word of words) {
-    if (/^[a-z]+$/.test(word)) {
-      // 英文单词直接加入
-      if (word.length > 1) tokens.push(word);
-    } else {
-      // 中文：按 bigram 切分
-      for (let i = 0; i < word.length - 1; i++) {
-        tokens.push(word.substring(i, i + 2));
+  // 英文词
+  cleaned.replace(/[a-z0-9+\-]+/gi, m => { tokens.add(m); return ''; });
+
+  // 中文：bigram + trigram
+  const chinese = cleaned.replace(/[^一-龥]+/g, '');
+  for (let i = 0; i < chinese.length - 1; i++) {
+    tokens.add(chinese.substring(i, i + 2));
+  }
+  for (let i = 0; i < chinese.length - 2; i++) {
+    tokens.add(chinese.substring(i, i + 3));
+  }
+
+  return [...tokens];
+}
+
+/**
+ * 关键词匹配得分（权重加成）
+ */
+function keywordScore(queryText, chunkContent, chunkTitle) {
+  const combined = (chunkTitle + ' ' + chunkContent).toLowerCase();
+  let score = 0;
+
+  // 检查核心关键词是否命中
+  for (const [kw, weight] of Object.entries(KEYWORD_WEIGHTS)) {
+    if (queryText.includes(kw) && combined.includes(kw)) {
+      score += weight;
+    }
+  }
+
+  // 扩展后的查询词命中加分
+  const expandedQuery = expandQuery(queryText);
+  const queryWords = expandedQuery.split(/\s+/).filter(w => w.length > 1);
+  for (const word of queryWords) {
+    if (combined.includes(word)) {
+      score += 0.5;
+    }
+  }
+
+  // 中文字串直接命中高权重
+  for (let len = 4; len >= 2; len--) {
+    for (let i = 0; i <= queryText.length - len; i++) {
+      const sub = queryText.substring(i, i + len);
+      if (/[一-龥]/.test(sub) && combined.includes(sub)) {
+        score += len * 0.8;
       }
     }
   }
 
-  return tokens;
+  return score;
 }
 
 /**
- * 计算两个文本的 Jaccard 相似度
+ * Jaccard 相似度
  */
-function jaccardSimilarity(tokensA, tokensB) {
-  const setA = new Set(tokensA);
-  const setB = new Set(tokensB);
-
+function jaccardSimilarity(setA, setB) {
   let intersection = 0;
   for (const t of setA) {
     if (setB.has(t)) intersection++;
   }
-
   const union = setA.size + setB.size - intersection;
   return union === 0 ? 0 : intersection / union;
 }
 
 /**
- * 检索最相关的 K 个 chunks
+ * 检索最相关的 K 个 chunks（混合策略）
  */
 function searchChunks(question, chunks, topK = TOP_K) {
-  const questionTokens = tokenize(question);
+  const expanded = expandQuery(question);
+  const queryTokens = new Set(extractKeywords(expanded));
+  const queryLow = question.toLowerCase();
 
   const scored = chunks.map((chunk, index) => {
-    const chunkTokens = tokenize(chunk.content);
-    const titleTokens = tokenize(chunk.title);
+    const chunkTokens = new Set(extractKeywords(chunk.content));
+    const titleTokens = new Set(extractKeywords(chunk.title));
 
-    // 综合得分：内容相似度 + 标题相似度（标题权重更高）
-    const contentScore = jaccardSimilarity(questionTokens, chunkTokens);
-    const titleScore = jaccardSimilarity(questionTokens, titleTokens) * 2.0;
-    const score = contentScore + titleScore;
+    // Jaccard 得分
+    const contentJacc = jaccardSimilarity(queryTokens, chunkTokens);
+    const titleJacc = jaccardSimilarity(queryTokens, titleTokens) * 3.0;
+
+    // 关键词命中得分
+    const kwScore = keywordScore(queryLow, chunk.content, chunk.title);
+
+    // 加权总分
+    const score = contentJacc * 2 + titleJacc * 3 + kwScore * 1.5;
 
     return { index, chunk, score };
   });
 
-  // 排序并取 top-K
   scored.sort((a, b) => b.score - a.score);
-
-  // 过滤掉零分项
-  return scored
-    .filter(item => item.score > 0)
-    .slice(0, topK);
+  return scored.filter(item => item.score > 0).slice(0, topK);
 }
 
 // ============================================================
