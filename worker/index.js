@@ -18,9 +18,11 @@
 // ============================================================
 
 // AI 提供商配置
-const AI_PROVIDER = 'openai'; // 'openai' | 'anthropic'
+const AI_PROVIDER = 'deepseek'; // 'deepseek' | 'openai' | 'anthropic'
 
 // API 端点
+const DEEPSEEK_API = 'https://api.deepseek.com/chat/completions';
+const DEEPSEEK_MODEL = 'deepseek-chat';  // 或 'deepseek-reasoner' (R1)
 const OPENAI_API = 'https://api.openai.com/v1/chat/completions';
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
 
@@ -135,6 +137,36 @@ ${contextText}
 }
 
 /**
+ * 调用 DeepSeek API（兼容 OpenAI 格式）
+ */
+async function callDeepSeek(apiKey, systemPrompt, question) {
+  const response = await fetch(DEEPSEEK_API, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: DEEPSEEK_MODEL,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: question },
+      ],
+      temperature: 0.5,
+      max_tokens: 2000,
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`DeepSeek API 错误: ${response.status} ${err}`);
+  }
+
+  const data = await response.json();
+  return data.choices[0].message.content;
+}
+
+/**
  * 调用 OpenAI API
  */
 async function callOpenAI(apiKey, systemPrompt, question) {
@@ -198,6 +230,9 @@ async function callAnthropic(apiKey, systemPrompt, question) {
  * 调用 AI 生成回答
  */
 async function generateAnswer(apiKey, provider, systemPrompt, question) {
+  if (provider === 'deepseek') {
+    return callDeepSeek(apiKey, systemPrompt, question);
+  }
   if (provider === 'anthropic') {
     return callAnthropic(apiKey, systemPrompt, question);
   }

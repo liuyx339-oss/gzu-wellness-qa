@@ -141,7 +141,7 @@ const WORKER_URL = 'https://gzu-wellness-qa.YOUR_SUBDOMAIN.workers.dev';
 |---|---|---|
 | 前端 | HTML/CSS/JS + marked.js | 零依赖构建 |
 | API 代理 | Cloudflare Workers | 免费 10 万请求/天 |
-| AI 对话 | OpenAI GPT-4o-mini / Claude Sonnet | 按 token 付费 |
+| AI 对话 | DeepSeek (deepseek-chat) / GPT-4o-mini / Claude Sonnet | 按 token 付费 |
 | 检索 | 关键词 Jaccard 相似度 | 无需额外 embedding 费用 |
 | 数据同步 | lark-cli + Python | GitHub Actions ubuntu runner |
 | 定时任务 | GitHub Actions cron | 免费（公开仓库） |
