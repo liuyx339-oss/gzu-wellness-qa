@@ -458,7 +458,7 @@ export default {
 
     const url = new URL(request.url);
 
-    // ===== 路由 /api/speech（Cloudflare AI Whisper，免费）=====
+    // ===== 路由 /api/speech（Cloudflare AI Whisper large-v3-turbo，免费）=====
     if (url.pathname === '/api/speech' && request.method === 'POST') {
       try {
         const formData = await request.formData();
@@ -468,8 +468,10 @@ export default {
         }
         const audioBytes = new Uint8Array(await audio.arrayBuffer());
 
-        const result = await env.AI.run('@cf/openai/whisper', {
+        const result = await env.AI.run('@cf/openai/whisper-large-v3-turbo', {
           audio: [...audioBytes],
+          task: 'transcribe',
+          language: 'zh',
         });
 
         return Response.json({ text: result.text || '' }, { headers: corsHeaders });

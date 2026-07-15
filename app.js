@@ -194,20 +194,17 @@ document.querySelectorAll('.example').forEach(el => {
 let isRecording = false;
 let mediaRecorder = null;
 let audioChunks = [];
+let micStream = null;
 
 micBtn.addEventListener('click', async () => {
   if (isRecording) {
     mediaRecorder.stop();
-    micBtn.classList.remove('recording');
-    micBtn.textContent = '⏳';
-    micBtn.disabled = true;
     return;
   }
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-    mediaRecorder = new MediaRecorder(stream, { mimeType });
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(micStream, { mimeType: 'audio/webm' });
     audioChunks = [];
 
     mediaRecorder.ondataavailable = (e) => {
@@ -215,26 +212,29 @@ micBtn.addEventListener('click', async () => {
     };
 
     mediaRecorder.onstop = async () => {
-      stream.getTracks().forEach(t => t.stop());
+      isRecording = false;
+      micBtn.classList.remove('recording');
+      micBtn.textContent = '⏳';
+      micBtn.disabled = true;
+      micStream.getTracks().forEach(t => t.stop());
+      micStream = null;
+
       if (audioChunks.length === 0) {
         micBtn.textContent = '🎤';
         micBtn.disabled = false;
         return;
       }
 
-      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
       const form = new FormData();
-      form.append('audio', audioBlob, 'recording.' + (mimeType.includes('webm') ? 'webm' : 'wav'));
+      form.append('audio', audioBlob, 'recording.webm');
 
       try {
-        const resp = await fetch(`${WORKER_URL}/api/speech`, {
-          method: 'POST', body: form,
-        });
+        const resp = await fetch(`${WORKER_URL}/api/speech`, { method: 'POST', body: form });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || '识别失败');
         questionInput.value = data.text || '';
       } catch (err) {
-        console.error('Speech error:', err);
         alert('语音识别失败: ' + err.message);
       } finally {
         micBtn.textContent = '🎤';
@@ -248,6 +248,7 @@ micBtn.addEventListener('click', async () => {
     isRecording = true;
 
   } catch (err) {
+    isRecording = false;
     if (err.name === 'NotAllowedError') {
       alert('请允许浏览器使用麦克风');
     } else {
