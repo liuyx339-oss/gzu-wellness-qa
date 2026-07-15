@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+worker/.wrangler/
+worker/node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets (DO NOT commit API keys)
+.env
+.env.local
+*.secret
+
+# Lark CLI
+.lark/

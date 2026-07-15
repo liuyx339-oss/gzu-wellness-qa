@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 知识库问答</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>📚 AI 知识库问答</h1>
+      <p class="subtitle">基于飞书文档的智能问答助手</p>
+    </header>
+
+    <!-- Search Section -->
+    <div class="search-section" id="searchSection">
+      <div class="search-box">
+        <textarea
+          id="questionInput"
+          placeholder="输入你的问题，AI 将从知识库文档中查找答案..."
+          rows="1"
+          autofocus
+        ></textarea>
+        <button id="askBtn" class="btn-ask" title="发送问题">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13"/>
+            <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
+          </svg>
+        </button>
+      </div>
+      <p class="hint">💡 试试：<span class="example" data-question="如何配置飞书应用？">如何配置飞书应用？</span></p>
+    </div>
+
+    <!-- Answer Section -->
+    <div class="chat-area" id="chatArea">
+      <!-- Answers will be appended here -->
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">🤖</div>
+      <p>输入问题，获取 AI 驱动的知识库答案</p>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading hidden" id="loading">
+      <div class="typing-indicator">
+        <span></span><span></span><span></span>
+      </div>
+      <p>正在查找相关文档并生成回答...</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        数据来源：飞书知识库 · 每日自动更新 ·
+        <a href="https://github.com" target="_blank" rel="noopener">GitHub</a> 部署
+      </p>
+    </footer>
+  </div>
+
+  <!-- Markdown renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
