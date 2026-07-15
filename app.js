@@ -190,10 +190,6 @@ document.querySelectorAll('.example').forEach(el => {
   });
 });
 
-// ===== Init =====
-updateBadge();
-if (!SpeechRecognition) micBtn.style.display = 'none';
-
 // ===== Voice Input (Web Speech API) =====
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let isRecording = false;
@@ -211,8 +207,6 @@ if (SpeechRecognition) {
       transcript += event.results[i][0].transcript;
     }
     questionInput.value = transcript;
-    questionInput.style.height = 'auto';
-    questionInput.style.height = Math.min(questionInput.scrollHeight, 120) + 'px';
   };
 
   recognition.onend = () => {
@@ -222,18 +216,16 @@ if (SpeechRecognition) {
   };
 
   recognition.onerror = (event) => {
-    console.log('Speech error:', event.error);
     micBtn.classList.remove('recording');
     micBtn.textContent = '🎤';
     isRecording = false;
   };
+} else {
+  micBtn.style.display = 'none';
 }
 
 micBtn.addEventListener('click', () => {
-  if (!SpeechRecognition) {
-    alert('你的浏览器不支持语音输入，请使用 Chrome 或 Edge');
-    return;
-  }
+  if (!recognition) return;
   if (isRecording) {
     recognition.stop();
   } else {
@@ -243,6 +235,9 @@ micBtn.addEventListener('click', () => {
     isRecording = true;
   }
 });
+
+// ===== Init =====
+updateBadge();
 
 // ===== Core Logic =====
 async function handleAsk() {
