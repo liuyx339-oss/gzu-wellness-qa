@@ -12,7 +12,43 @@
     <header class="header">
       <h1>📚 AI 知识库问答</h1>
       <p class="subtitle">基于飞书文档的智能问答助手</p>
+      <button class="btn-settings" id="btnSettings" title="API 设置">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+      <span class="api-badge" id="apiBadge" style="display:none">⚡已配置</span>
     </header>
+
+    <!-- API Settings Panel -->
+    <div class="settings-panel hidden" id="settingsPanel">
+      <div class="settings-card">
+        <h3>⚙️ API 配置</h3>
+        <p class="settings-desc">配置你的 AI API Key，数据仅保存在浏览器本地</p>
+
+        <label for="apiProvider">AI 提供商</label>
+        <select id="apiProvider">
+          <option value="deepseek">DeepSeek（推荐 · 便宜好用）</option>
+          <option value="openai">OpenAI</option>
+          <option value="anthropic">Anthropic Claude</option>
+        </select>
+
+        <label for="apiKey">API Key</label>
+        <input type="password" id="apiKey" placeholder="sk-... 或 fk...">
+        <div class="api-links">
+          <span>获取 Key：</span>
+          <a href="https://platform.deepseek.com/api_keys" class="provider-link" data-provider="deepseek" target="_blank">DeepSeek</a>
+          <a href="https://platform.openai.com/api-keys" class="provider-link" data-provider="openai" target="_blank" style="display:none">OpenAI</a>
+          <a href="https://console.anthropic.com/" class="provider-link" data-provider="anthropic" target="_blank" style="display:none">Anthropic</a>
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn-save" id="btnSave">💾 保存</button>
+          <button class="btn-clear" id="btnClear">🗑 清除</button>
+        </div>
+        <p class="settings-hint">🔒 API Key 仅保存在你的浏览器 localStorage 中，不会上传到服务器</p>
+      </div>
+    </div>
 
     <!-- Search Section -->
     <div class="search-section" id="searchSection">
@@ -30,13 +66,11 @@
           </svg>
         </button>
       </div>
-      <p class="hint">💡 试试：<span class="example" data-question="如何配置飞书应用？">如何配置飞书应用？</span></p>
+      <p class="hint">💡 试试：<span class="example" data-question="NAD+输注后有什么注意事项？">NAD+输注后有什么注意事项？</span></p>
     </div>
 
     <!-- Answer Section -->
-    <div class="chat-area" id="chatArea">
-      <!-- Answers will be appended here -->
-    </div>
+    <div class="chat-area" id="chatArea"></div>
 
     <!-- Empty State -->
     <div class="empty-state" id="emptyState">
@@ -56,12 +90,11 @@
     <footer class="footer">
       <p>
         数据来源：飞书知识库 · 每日自动更新 ·
-        <a href="https://github.com" target="_blank" rel="noopener">GitHub</a> 部署
+        <a href="https://github.com/liuyx339-oss/gzu-wellness-qa" target="_blank" rel="noopener">GitHub</a>
       </p>
     </footer>
   </div>
 
-  <!-- Markdown renderer -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="app.js"></script>
 </body>

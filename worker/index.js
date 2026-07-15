@@ -317,15 +317,15 @@ export default {
         });
       }
 
-      // 检查 API Key 配置
-      const apiKey = env.AI_API_KEY;
-      const provider = env.AI_PROVIDER || AI_PROVIDER;
+      // 优先用请求中的 apiKey，否则用环境变量
+      const apiKey = body.apiKey || env.AI_API_KEY;
+      const provider = body.provider || env.AI_PROVIDER || AI_PROVIDER;
 
       if (!apiKey) {
         return new Response(JSON.stringify({
-          error: 'AI API Key 未配置，请联系管理员',
+          error: '未配置 API Key。请点击右上角⚙️齿轮图标配置你的 API Key',
         }), {
-          status: 500,
+          status: 401,
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',

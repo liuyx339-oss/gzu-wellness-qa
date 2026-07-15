@@ -44,6 +44,7 @@ body {
 .header {
   text-align: center;
   padding: 32px 0 20px;
+  position: relative;
 }
 
 .header h1 {
@@ -56,6 +57,159 @@ body {
 .subtitle {
   color: var(--text-secondary);
   font-size: 14px;
+}
+
+.btn-settings {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+}
+
+.btn-settings:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.api-badge {
+  position: absolute;
+  right: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* ===== Settings Panel ===== */
+.settings-panel {
+  margin-bottom: 8px;
+  animation: slideDown .25s ease;
+}
+
+.settings-panel.hidden { display: none; }
+
+@keyframes slideDown {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 500px; }
+}
+
+.settings-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+}
+
+.settings-card h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.settings-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.settings-card label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+
+.settings-card select,
+.settings-card input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s;
+}
+
+.settings-card select:focus,
+.settings-card input:focus {
+  border-color: var(--primary);
+}
+
+.api-links {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.api-links a {
+  color: var(--primary);
+  text-decoration: none;
+  margin-right: 8px;
+}
+
+.api-links a:hover { text-decoration: underline; }
+
+.settings-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.btn-save {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background .15s;
+}
+
+.btn-save:hover { background: var(--primary-hover); }
+
+.btn-clear {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all .15s;
+}
+
+.btn-clear:hover {
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.settings-hint {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 /* ===== Search Section ===== */
