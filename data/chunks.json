@@ -31,140 +31,260 @@
   },
   {
     "id": 5,
+    "title": "catalog_套餐明细",
+    "content": "## IV Drip Mix\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 7,585.36 |\n| 套餐名 | 个性化定制能量针套餐 |  |  |  |  |\n| Personalized IV-Drip Package,,, 套餐价 ,  5 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020260083 |  |  | 折扣率 | 30.4% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 静脉穿刺及耗材 | Venipuncture for intravenous infusion   静脉穿刺用于静脉输液 | NX0008 | 1 | 225.00 | 225.00 |\n|  | IV Infusion Consumable Package 静脉输液耗材包 | Consum07 | 1 | 272.79 | 272.79 |\n| 微压氧舱 | Microbaric oxygen therapy, per session 微压氧舱氧疗服务/每次 | NX0032 | 1 | 735.00 | 735.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 输液费 | IV Infusion per hour 每小时静脉注射量 | NX0005 | 3 | 95.00 | 285.00 |\n| 留观房费 | Treatment/ observation room - 3 hours 3小时治疗或观察房费 | RB0048 | 1 | 804.00 | 804.00 |\n| 皮下或肌肉注射费及耗材 | Therapeutic , prophylactic , or diagnostic injection ( specify substance or drug ) ; subcutaneous or | 96372 | 1 | 175.00 | 175.00 |\n|  | Consumable kit for Injection   注射类耗材包 | Consum24 | 1 | 17.00 | 17.00 |",
+    "tokens_est": 577
+  },
+  {
+    "id": 6,
+    "title": "catalog_套餐明细",
+    "content": "## NAD+套餐-单次\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 5,455.23 |\n| 套餐名 | 元气修复能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip NAD+ & Microbaric Oxygen Therapy Package,,, 套餐价 ,  4 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020260075 |  |  | 折扣率 | 21.54% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 输液后微压氧舱服务 | Microbaric oxygen therapy, per session 微压氧舱氧疗服务/每次 | NX0032 | 1 | 735.00 | 735.00 |\n| 共静滴1h左右 | Vitamin C 500mg/2ml Injection 10/box 维生素C注射液(天津金耀) | P20407 | 1 | 2.12 | 2.12 |\n|  | Glutathione 1.8g Injection 10/box 注射用 谷胱甘肽( 阿拓莫兰) | P20320 | 1 | 148.50 | 148.50 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 2 | 11.55 | 23.10 |\n|  | Normal Saline 0.9%10ml Iniection60/box 氯化钠注射液(中国大家) | P90130 | 1 | 4.11 | 4.11 |\n|  | IV Infusion per hour 每小时静脉注射量 | NX0005 | 1 | 95.00 | 95.00 |\n| 皮下注射胸腺法新(日达仙) | Thymalfasin ZADAXIN 1.6mg Injection 2/box 注射用 胸腺法新( 日达仙) | P00698 | 1 | 1,182.50 | 1,182.50 |",
+    "tokens_est": 579
+  },
+  {
+    "id": 7,
+    "title": "catalog_套餐明细",
+    "content": "## 白蛋白Coretein\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 4,604.01 |\n| 套餐名 | 白蛋白能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip Coretein & Microbaric Oxygen Therapy Package,,, 套餐价 ,  3 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020260075_1 |  |  | 折扣率 | 28.76% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 输液后微压氧舱服务 | Microbaric oxygen therapy, per session 微压氧舱氧疗服务/每次 | NX0032 | 1 | 735.00 | 735.00 |\n| 共静滴2h左右 | Serum Albumin Human   20 % ALBURX 10g injection 50ml 人血白蛋白注射液 | P10978 | 1 | 935.00 | 935.00 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |\n|  | Creatine Phosphate Sodium 1g Injection 1/box 注射用 磷酸肌酸钠( 河北天成) | P90283 | 1 | 187.00 | 187.00 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |\n|  | Vitamin C 500mg/2ml Injection 10/box 维生素C注射液(天津金耀) | P20407 | 1 | 2.12 | 2.12 |\n|  | IV Infusion per hour 每小时静脉注射量 | NX0005 | 2 | 95.00 | 190.00 |",
+    "tokens_est": 585
+  },
+  {
+    "id": 8,
+    "title": "catalog_套餐明细",
+    "content": "## 脑活素Neurogenexi\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 5,178.73 |\n| 套餐名 | 脑活素能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip Neurogenex & Microbaric Oxygen Therapy Package,,, 套餐价 ,  4 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020260075_2 |  |  | 折扣率 | 17.35% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 输液后微压氧舱服务 | Microbaric oxygen therapy, per session 微压氧舱氧疗服务/每次 | NX0032 | 1 | 735.00 | 735.00 |\n| 共静滴3h左右 | Piracetam 1g/5ml injection 5/box 吡拉西坦注射液( 锦帝九州) | P20589 | 1 | 935.00 | 935.00 |\n|  | Normal Saline 0.9% 250ml Infusion 1/bottle 氯化钠注射液(中国大冢) | P02123 | 1 | 15.68 | 15.68 |\n|  | Ginkgo Leaves Extract GINATON 17.5mg/5ml Injection 10/box 银杏叶提取物注射液( 金纳多) | P01201 | 1 | 146.03 | 146.03 |\n|  | Normal Saline 0.9% 250ml Infusion 1/bottle 氯化钠注射液(中国大冢) | P02123 | 1 | 15.68 | 15.68 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |\n|  | Troxerutin and Cerebroprotein 5ml Hydrolysate Injection 5/box 曲克芦丁脑蛋白水解物注射液（ 吉林四环） | P20602 | 1 | 235.00 | 235.00 |",
+    "tokens_est": 618
+  },
+  {
+    "id": 9,
+    "title": "catalog_套餐明细",
+    "content": "## RTMS套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 1,515.00 |\n| 套餐名 | BrainBalance深眠磁疗(重复经颅磁刺激rTMS;首次体验) |  |  |  |  |\n| BrainBalance Deep Sleep Magnetic Therapy Package （rTMS;First-Time Experience ）,,, 套餐价 ,  299.00 ,,,, |  |  |  |  |  |\n| 编号/医嘱号 | PKG1388020260076 |  |  | 折扣率 | 80.26% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| rTMS | Therapeutic repetitive transcranial magnetic stimulation ( TMS ) treatment, per session【by Nurse】 治疗 | NX0034 | 1 | 315.00 | 315.00 |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |\n|  |  |  |  | 总价 | 2,775.00 |\n| 套餐名 | BrainBalance深眠磁疗(重复经颅磁刺激rTMS; 5次) |  |  |  |  |\n| BrainBalance Deep Sleep Magnetic Therapy Package （rTMS; 5sessions ）,,, 套餐价 ,  1 | 490.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020260076_1 |  |  | 折扣率 | 46.31% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |",
+    "tokens_est": 471
+  },
+  {
+    "id": 10,
+    "title": "catalog_套餐明细",
+    "content": "## Hydromax套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 4,309.23 |\n| 套餐名 | 水合修复能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip Hydromax & Microbaric Oxygen Therapy Package,,, 套餐价 ,  3 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250035_1 |  |  | 折扣率 | 23.9% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 门冬氨酸钾镁注射液(潘南金)+5%葡萄糖注射液250mI，静滴 60min | Potassium + Magnesium Aspartate PANANGIN 10ml Injection 5/box 门冬氨酸钾镁注射液( 潘南金) | P02050 | 1 | 14.60 | 14.60 |\n|  | Dextrose 5% 250ml Infusion 1/bottle 葡萄糖注射液(四川科伦) | P20061 | 1 | 14.19 | 14.19 |\n| 4g乙酰半胱氨酸注射液+10%葡萄糖注射液250ml，静滴 60min | Acetylcysteine 4g/20ml Injection 1/box 乙酰半胱氨酸注射液( 阿思欣泰) | P03172 | 1 | 503.53 | 503.53 |\n|  | Dextrose 5% 100ml Infusion 1/pack 葡萄糖注射液(中国大冢) | P03601 | 1 | 15.02 | 15.02 |\n| 冲管用 | Normal Saline 0.9 %100ml Infusion1/pack 氯化钠注射 | P00526 | 1 | 11.55 | 11.55 |\n| 静滴30min | Creatine Phosphate Sodium 1g Injection 1/box 注射用 磷酸肌酸钠( 河北天成) | P90283 | 1 | 187.00 | 187.00 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |",
+    "tokens_est": 631
+  },
+  {
+    "id": 11,
+    "title": "catalog_套餐明细",
+    "content": "## Vitaglow套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 3,885.17 |\n| 套餐名 | 肝净能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip Vitaglow & Microbaric Oxygen Therapy Package,,, 套餐价 ,  3 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250035_2 |  |  | 折扣率 | 15.6% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 500mg维生素C注射液1支+1.8注射用谷胱甘肽1支(+0.9%氣化钠注射液10ml溶解)+0.9%氯化钠注射液100ml，静滴 35min | Vitamin C 500mg/2ml Injection 10/box 维生素C注射液(天津金耀) | P20407 | 1 | 2.12 | 2.12 |\n|  | Glutathione 1.8g Injection 10/box 注射用 谷胱甘肽( 阿拓莫兰) | P20320 | 1 | 148.50 | 148.50 |\n|  | Normal Saline 0.9%10ml Iniection60/box 氯化钠注射液(中国大家) | P90130 | 1 | 4.11 | 4.11 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |\n| 4g乙酰半胱氨酸注射液+10%葡萄糖注射液250ml，静滴 60min | Acetylcysteine 4g/20ml Injection 1/box 乙酰半胱氨酸注射液( 阿思欣泰) | P03172 | 1 | 503.53 | 503.53 |\n|  | Dextrose 5% 100ml Infusion 1/pack 葡萄糖注射液(中国大冢) | P03601 | 1 | 15.02 | 15.02 |\n| 冲管用 | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |",
+    "tokens_est": 628
+  },
+  {
+    "id": 12,
+    "title": "catalog_套餐明细",
+    "content": "## Proboost套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 5,215.17 |\n| 套餐名 | 进阶强化能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip Proboost & Microbaric Oxygen Therapy Package,,, 套餐价 ,  4 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250040 |  |  | 折扣率 | 17.9% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 静滴35min | Vitamin C 500mg/2ml Injection 10/box 维生素C注射液(天津金耀) | P20407 | 1 | 2.12 | 2.12 |\n|  | Glutathione 1.8g Injection 10/box 注射用 谷胱甘肽( 阿拓莫兰) | P20320 | 1 | 148.50 | 148.50 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |\n|  | Normal Saline 0.9%10ml Iniection60/box 氯化钠注射液(中国大家) | P90130 | 1 | 4.11 | 4.11 |\n| 静滴30min | Creatine Phosphate Sodium 1g Injection 1/box 注射用 磷酸肌酸钠( 河北天成) | P90283 | 1 | 187.00 | 187.00 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |\n| 冲管用 | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |",
+    "tokens_est": 589
+  },
+  {
+    "id": 13,
+    "title": "catalog_套餐明细",
+    "content": "## coreboost套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 4,610.86 |\n| 套餐名 | 核心活力能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip Coreboost & Microbaric Oxygen Therapy Package,,, 套餐价 ,  3 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250040_1 |  |  | 折扣率 | 28.9% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 药事服务费 | Pharmacy service fee, OutPatient/per episode 药事服务费，门诊/账单 | S9430036 | 1 | 30.00 | 30.00 |\n| 静滴35min | Vitamin C 500mg/2ml Injection 10/box 维生素C注射液(天津金耀) | P20407 | 1 | 2.12 | 2.12 |\n|  | Glutathione 1.8g Injection 10/box 注射用 谷胱甘肽( 阿拓莫兰) | P20320 | 1 | 148.50 | 148.50 |\n|  | Normal Saline 0.9 % 100ml Infusion 1/pack 氯化钠注射液(中国大冢) | P00526 | 1 | 11.55 | 11.55 |\n|  | Normal Saline 0.9%10ml Iniection60/box 氯化钠注射液(中国大家) | P90130 | 1 | 4.11 | 4.11 |\n| 静推5min | Levocarnitine 1g/5ml Injection 2/box 左卡尼汀注射液( 东维力) | P20431 | 1 | 19.29 | 19.29 |\n| 皮下注射 | Thymalfasin ZADAXIN 1.6mg Injection 2/box 注射用 胸腺法新( 日达仙) | P00698 | 1 | 1,182.50 | 1,182.50 |\n| 留观房费（9楼输液） | Treatment/ observation room - 1st hour 首个小时治疗或观察房费 | RB0046 | 1 | 268.00 | 268.00 |",
+    "tokens_est": 592
+  },
+  {
+    "id": 14,
+    "title": "catalog_套餐明细",
+    "content": "## Menergy套餐\n\n|  | Manalyze男性状态解码套餐+Menergy 男性健康能量针套餐（两个套餐叠加购买可享受优惠价12800元） |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 4,482.98 |\n| 套餐名 | 男性健康能量针 & 微压氧疗套餐 |  |  |  |  |\n| IV drip Menergy & Microbaric Oxygen Therapy Package,,, 套餐价 ,  3 | 280.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250044_1 |  |  | 折扣率 | 26.8% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 医生评估咨询 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 加灭菌注射用水适量使溶解，加入 0.9％氯化钠注射液；静滴 30min | Water-Soluble Vitamin Injection 10/box 注射用 水溶性维生素( V佳林) | P20138 | 1 | 34.10 | 34.10 |\n|  | Sterile Water 10ml Injection 50/box 灭菌注射用水(湖北科伦) | P11636 | 1 | 6.17 | 6.17 |\n|  | Normal Saline 0.9 %100ml Infusion1/pack 氯化钠注射 | P00526 | 1 | 11.55 | 11.55 |\n| 溶于5-10mL注射用水；静脉推注 | Levocarnitine 5ml:1g solution for injection 5/box 左卡尼汀注射液 ( 可益能) | P90141 | 1 | 29.70 | 29.70 |\n|  | Sterile Water 10ml Injection 50/box 灭菌注射用水(湖北科伦) | P11636 | 1 | 6.17 | 6.17 |\n| 皮下注射 | Thymalfasin ZADAXIN 1.6mg Injection 2/box 注射用 胸腺法新( 日达仙) | P00698 | 1 | 1,182.50 | 1,182.50 |\n| 留观房费（9楼输液） | Treatment/ observation room - 1st hour 首个小时治疗或观察房费 | RB0046 | 1 | 268.00 | 268.00 |\n| 输液后微压氧舱服务 | Microbaric oxygen therapy, per session 微压氧舱氧疗服务/每次 | NX0032 | 1 | 735.00 | 735.00 |",
+    "tokens_est": 639
+  },
+  {
+    "id": 15,
+    "title": "catalog_套餐明细",
+    "content": "## Femalyze 女性状态解码套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  |  |  |\n| 套餐名 | Femalyze 女性状态解码套餐 |  |  |  |  |\n| Femalyze Female Special Examination Package,,,,, 套餐价 ,  9 | 980.00 ,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250046 |  |  |  |  |\n| 项目名称 | 内容详情 |  | Item Desc | Code | 数量 |\n| 诊金 | 专家咨询 |  | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 |\n| 全套女性荷尔蒙健康评估 | LH、FSH、SHBG、IGF-1、IGF-BP3、P4、P5、CORT、ALD、17-OHP4、17-OHP5、COR、DHEA、AD、T、FT、DHT、E1、E2、E3 |  |  |  |  |\n| 荷尔蒙的分泌量与平衡关系,,Female Hormonal Health Assessment全套女性荷尔蒙健康评估,8300318,1,  1 | 980.00 ,  1 | 980.00 ,, |  |  |  |\n| 雌激素代谢水平评估 | 2-羟雌酮、4-羟雌酮、16α-羟雌酮、2-OHE1/16α-OHE1 |  |  |  |  |\n| 2-甲氧基雌酮 、4-甲氧基雌酮 、2-MeOE1/2-OHE1 、 |  |  |  |  |  |\n| 4-MeOE1/4-OHE1 、保护性雌激素代谢物%、致癌性雌激素代谢物% 肌酸酐 |  |  |  |  |  |\n| 人体雌激素代谢过程进行全面评估,,Evaluation of estrogen metabolism level雌激素代谢水平评估,8300319,1,  1 | 080.00 ,  1 | 080.00 ,, |  |  |  |\n| 骨代谢健康评估 | 骨代谢调节激素：甲状旁腺激素、D2、D3、D总、降钙素 |  |  |  |  |\n| 无机物：钙 |  |  |  |  |  |",
+    "tokens_est": 500
+  },
+  {
+    "id": 16,
+    "title": "catalog_套餐明细",
+    "content": "## Manalyze 男性状态解码套餐\n\n|  |  |  | Manalyze男性状态解码套餐+Menergy 男性健康能量针套餐（两个套餐叠加购买可享受优惠价12800元） |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  |  |  |\n| 套餐名 | Manalyze 男性状态解码套餐 |  |  |  |  |\n| Manalyze Male Special Examination Package,,,,, 套餐价 ,  9 | 980.00 ,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250044 |  |  |  |  |\n| 项目名称 | 内容详情 |  | Item Desc | Code | 数量 |\n| 诊金 | 专家咨询 |  | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 |\n| 全套男性荷尔蒙健康评估 | LH、FSH、SHBG、IGF-1、IGF-BP3、T-PSA、F-PSA、P4、P5、CORT、ALD、17-OHP4、17-OHP5、COR、DHEA、AD、T、FT、DHT、E1、E2 |  |  |  |  |\n| 荷尔蒙的分泌量与平衡关系,,Male Hormonal Health Assessment全套男性荷尔蒙健康评估,8300317,1,  1 | 980.00 ,  1 | 980.00 ,, |  |  |  |\n| 骨代谢健康评估 | 骨代谢调节激素：甲状旁腺激素、D2、D3、D总、降钙素 |  |  |  |  |\n| 无机物：钙 |  |  |  |  |  |\n| 骨形成标志物：总I型胶原氨基端延长肽 |  |  |  |  |  |\n| 骨吸收标志物：I型胶原羧基端肽β特殊序列、N-端骨钙素 |  |  |  |  |  |\n| 造骨所需的营养素维生素D与骨质破坏标记β-CTx,,Bone metabolic health assessment骨代谢健康评估,840801,1,  1 | 020.00 ,  1 | 020.00 ,, |  |  |  |\n| 全套维生素检测 | 维生素A、B1、B2、B3、B5、B6、B7、B9、B12、C、D、D2、D3、E、K、K1 |  | Water-soluble B vitamins panel(B1,B2,B3,B5,B6,B7,B9(Folic acid, 5-Methy terahyrofolate and B12) 水溶性维 | 8442505 | 1 |",
+    "tokens_est": 573
+  },
+  {
+    "id": 17,
+    "title": "catalog_套餐明细",
+    "content": "## 全外显子组基因测序\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  |  | 总价 |\n|  | 套餐名 | 全外显子组基因测序套餐 |  |  |  |\n| Comprehensive Whole Exome Health Screening Package,,, 套餐价 ,  5 | 980.00 ,,, |  |  |  |  |\n|  | 编号/医嘱号 | PKG1388020260070 |  |  | 折扣率 |\n|  | 项目分类 | Code Description | Code | QTY | Price |\n|  | 诊金 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 |\n|  | 报告解读 |  |  |  |  |\n| （报告长，解读需时较长）,OP / ER specialist consultation | level 2 门急诊专家咨询，2级,99242G,1,  1 | 200.00 ,  1 | 200.00 ,不绑order set,, |  |  |\n|  | 全基因组测序 | Comprehensive Medical-Grade Whole Exome Health Screening医学级人体全套基因体检，22000+基因（全外显子组基因高通量测序法） | Molp3118 | 1 | 6,000.00 |\n|  | 采血护理 | Venipuncture（by nurse) for venous blood collection 静脉穿刺采血（由护士操作) | 36415 | 1 | 175.00 |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |",
+    "tokens_est": 434
+  },
+  {
+    "id": 18,
+    "title": "catalog_套餐明细",
+    "content": "## 血浆置换1次套餐\n\n|  |  |  |  | 总价 | 78,083.80 |\n| --- | --- | --- | --- | --- | --- |\n| 套餐名： | TPE治疗性血浆置换抗衰套餐（1次） |  |  |  |  |\n| Therapeutic Plasma Exchange Package(1 time),,,套餐价,  58 | 000.00 ,,,, |  |  |  |  |\n| 编号/医嘱号： | PKG1388020250068 |  |  | 折扣率 | 25.72% |\n| 项目 | Description | Code | QTY | Price | SUBTotal |\n| 门诊咨询诊金 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 住院诊金 | Initial hospital inpt or observation care , CCM , level 2 住院或观察评估与管理 ， 首次 ， 2级 | 99222 | 1 | 1,815.00 | 1,815.00 |\n|  | Hospital inpt or observation discharge day management   ≤30min 住院或观察出院日评估与管理 ， ≤30分钟 | 99238 | 1 | 1,290.00 | 1,290.00 |\n| 房费 | Private Room Accommodation 单人间住宿 | PRIVT | 1 | 3,988.00 | 3,988.00 |\n| 超声引导下穿刺置管 | Insert non - tunneled cv catheter ; > 5 years   非隧道式中心静脉导管插入 ； > 5岁 | 36556 | 1 | 2,205.00 | 2,205.00 |\n|  | Ultrasound guidance for vascular access requiring evaluation of access sites, selected vessel patenc | 76937 | 1 | 261.00 | 261.00 |\n| 血浆置换操作费 | Therapeutic Apheresis Plasma Pheresis 治疗性血浆分离术(血浆置换治疗) | 36514 | 1 | 6,775.00 | 6,775.00 |\n| 单次血浆置换全程4小时（常规） | CRRT nursing care , per hour 持续血液净化护理，每小时 | INUR5 | 4 | 335.00 | 1,340.00 |\n| 穿刺/置管等耗材 | CovidienCentral venous cathete 柯惠血液透析用中心静脉导管及附件8888221220 | 159345IV004 | 1 | 2,178.00 | 2,178.00 |\n|  | Mepore9*10                     Molnlycke 美敷自粘性外科敷料 9×10 | 012764WD001 | 1 | 9.43 | 9.43 |",
+    "tokens_est": 701
+  },
+  {
+    "id": 19,
+    "title": "catalog_套餐明细",
+    "content": "## 血浆置换2次套餐\n\n|  |  |  |  | 总价 | 125,837.57 |\n| --- | --- | --- | --- | --- | --- |\n| 套餐名： | TPE治疗性血浆置换抗衰套餐（2次） |  |  |  |  |\n| Therapeutic Plasma Exchange Package(2 times),,,套餐价,  98 | 000.00 ,,,, |  |  |  |  |\n| 编号/医嘱号： | PKG1388020250068_1 |  |  | 折扣率 | 22.12% |\n| 项目 | Description | Code | QTY | Price | SUBTotal |\n| 门诊咨询诊金 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 住院诊金 | Initial hospital inpt or observation care , CCM , level 2 住院或观察评估与管理 ， 首次 ， 2级 | 99222 | 1 | 1,815.00 | 1,815.00 |\n|  | Subsequent hospital inpt or observation care ,  EEM , level 2 住院或观察评估与管理 ， 后续 ， 2级 | 99232 | 1 | 995.00 | 995.00 |\n|  | Hospital inpt or observation discharge day management   ≤30min 住院或观察出院日评估与管理 ， ≤30分钟 | 99238 | 1 | 1,290.00 | 1,290.00 |\n| 房费 | Private Room Accommodation 单人间住宿 | PRIVT | 2 | 3,988.00 | 7,976.00 |\n| 超声引导下穿刺置管 | Insert non - tunneled cv catheter ; > 5 years   非隧道式中心静脉导管插入 ； > 5岁 | 36556 | 1 | 2,205.00 | 2,205.00 |\n|  | Ultrasound guidance for vascular access requiring evaluation of access sites, selected vessel patenc | 76937 | 1 | 261.00 | 261.00 |\n| 血浆置换操作费 | Therapeutic Apheresis Plasma Pheresis 治疗性血浆分离术(血浆置换治疗) | 36514 | 2 | 6,775.00 | 13,550.00 |\n| 单次血浆置换全程4小时（常规） | CRRT nursing care , per hour 持续血液净化护理，每小时 | INUR5 | 8 | 335.00 | 2,680.00 |\n| 穿刺/置管等耗材 | CovidienCentral venous cathete 柯惠血液透析用中心静脉导管及附件8888221220 | 159345IV004 | 1 | 2,178.00 | 2,178.00 |",
+    "tokens_est": 716
+  },
+  {
+    "id": 20,
+    "title": "catalog_套餐明细",
+    "content": "## 免疫时钟检测套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 2,478.64 |\n| 套餐名 | 免疫时钟评估检测套餐 |  |  |  |  |\n| Immunological Age Assessment Package,,, 套餐价 ,  1 | 800.00 ,,,, |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250067 |  |  | 折扣率 | 27.4% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 免疫时钟检测 | Immunological Age Assessment免疫年龄评估检测(CD3/CD8/CD45/ CD45RA/CD62L+ IL-2. IL-4,IL-6. IL-10, TNF-a, IFN- | IMM57 | 1 | 1,026.60 | 1,026.60 |\n| 医生评估 | OP / ER specialist consultation, level 2 门急诊专家咨询，2级 | 99242G | 1 | 1,200.00 | 1,200.00 |\n| 解读报告 | Non - Chargeable Visit | UFH011 | 1 | - | - |\n| 采血护理及耗材 | Venipuncture（by nurse) for venous blood collection 静脉穿刺采血（由护士操作) | 36415 | 1 | 175.00 | 175.00 |\n|  | Blood Drawing Consumable Package 静脉抽血耗材包 | Consum08 | 1 | 77.04 | 77.04 |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |",
+    "tokens_est": 437
+  },
+  {
+    "id": 21,
+    "title": "catalog_套餐明细",
+    "content": "## 心脏活力提升套餐\n\n|  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n|  |  |  |  | 总价 | 2,345.00 |\n| 套餐名 | 心脏活力提升套餐-首次体验 |  |  |  |  |\n| Cardiac Vitality Boost Package（First-Time Experience）,,, 套餐价 ,  99.00 ,,,, |  |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250054 |  |  | 折扣率 | 95.78% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |\n| 心脏辅助法的循环辅助 | Cardioassist - method , circulatory assist ; externl 心脏辅助法的循环辅助 ， 外部 | 92971 | 1 | 1,630.00 | 1,630.00 |\n| ECG | 93000 ECG 心电图 ， 常规至少12根导线 ， 有说明解释及报告 | 93000 | 1 | 715.00 | 715.00 |\n|  |  |  |  |  |  |\n|  |  |  |  |  |  |\n|  |  |  |  | 总价 | 2,345.00 |\n| 套餐名 | 心脏活力提升套餐-单次 |  |  |  |  |\n| Cardiac Vitality Boost Package（1 session）,,, 套餐价 ,  299.00 ,,,, |  |  |  |  |  |\n| 编号/医嘱号 | PKG1388020250054_1 |  |  | 折扣率 | 87.25% |\n| 项目分类 | Item Desc | Code | 数量 | 单价 | 小计 |",
+    "tokens_est": 402
+  },
+  {
+    "id": 22,
     "title": "catalog_服务项目",
     "content": "# GZU Wellness 服务项目目录\n\n> 覆盖 8 种核心 IV 能量针产品线，每种针对不同健康需求",
     "tokens_est": 27
   },
   {
-    "id": 6,
+    "id": 23,
     "title": "catalog_服务项目",
     "content": "## 服务总览\n\n| 服务名称 | 主打特色 | 主要成分 | 适用人群 | 主要适应症 | 输注时间 |\n| --- | --- | --- | --- | --- | --- |\n| **Coreboost 核心活力针** | 主动锻炼免疫 | 维C、左卡尼汀、谷胱甘肽、胸腺法新 | 久坐疲乏、代谢不佳、亚健康状态者 | 疲劳、免疫力低下、代谢缓慢、肝功支持 | 60分钟 |\n| **Hydromax 水合修复能量针** | 快速补充电解质，运动补能 | 门冬氨酸钾镁、磷酸肌酸钠、乙酰半胱氨酸 | 运动爱好者、差旅频繁、脑力工作者、慢性疲劳者 | 运动恢复、电解质紊乱、疲劳、呼吸道 | 1小时30分钟 |\n| **Manergy 男性健康能量针** | 男性精力恢复 | 水溶性维生素、左卡尼汀、胸腺法新 | 易疲劳、体力不足、注意力差、腰背酸痛男性 | 精力下降、免疫力差、疲劳恢复 | 40分钟 |\n| **Proboost 进阶强化能量针** | 被动免疫修复 | 维C、谷胱甘肽、磷酸肌酸钠、免疫球蛋白 | 免疫力弱、深度疲劳、体能消耗高者 | 免疫强化、深度疲劳、运动后恢复、感染风险 | 1小时50分钟 |\n| **Vitaglow 肝净能量针** | 护肝解毒，针对酒精肝脂肪肝熬夜 | 维C、谷胱甘肽、乙酰半胱氨酸 | 应酬多、作息乱、饮食油腻、肝功异常者 | 肝脏解毒、酒精代谢、肝功异常、疲劳恢复 | 1小时10分钟 |\n| **NAD+ 元气修复能量针** | 抗衰，提升细胞能量 | 维C、谷胱甘肽、胸腺法新、NAD+ | 快节奏生活、专注力差、抗衰需求、免疫力低者 | 抗衰老、线粒体功能提升、神经保护、疲劳恢复 | 1小时45分钟（非肌注）/ 50分钟（肌注） |",
     "tokens_est": 376
   },
   {
-    "id": 7,
+    "id": 24,
     "title": "catalog_服务项目",
     "content": "## 各服务产品详细说明\n\n### Coreboost 核心活力针 — 主动锻炼免疫\n\nCoreboost 是针对亚健康人群设计的入门级能量针。单次输注仅需60分钟，适合都市白领等久坐疲乏人群。通过维C+左卡尼汀+谷胱甘肽+胸腺法新的复合配方，温和激活身体免疫功能，改善代谢缓慢的状况。\n\n**核心卖点**：主动锻炼免疫系统，首次体验客户的入门选择。\n\n---\n\n### Hydromax 水合修复能量针 — 运动补能专家\n\nHydromax 是专为运动爱好者和高度活跃人群打造。门冬氨酸钾镁快速补充电解质，磷酸肌酸钠提供即时能量，乙酰半胱氨酸协助呼吸道黏液代谢。单次1小时30分钟的输注能迅速纠正运动后的电解质失衡。\n\n**核心卖点**：运动后快速恢复，差旅频繁人群的理想选择。\n\n---\n\n### Manergy 男性健康能量针 — 男性专属\n\n针对男性精力恢复的专属配方。水溶性维生素+左卡尼汀+胸腺法新的联合输出，40分钟快速输注。适合体力不足、注意力差、腰部酸痛的男性客户。\n\n**核心卖点**：男性专属，40分钟快速输注，见效快。\n\n---\n\n### Probost 进阶强化能量针 — 深度免疫修复\n\nProboost 含有免疫球蛋白，是GZU能量针系列中的\"进阶版\"。维C+谷胱甘肽+磷酸肌酸钠+免疫球蛋白的临床级配方，针对需要深度免疫支持的人群。单次输注1小时50分钟。\n\n**核心卖点**：含免疫球蛋白的被动免疫修复方案，适合免疫力低的深度疲劳人群。\n\n---\n\n### Vitaglow 肝净能量针 — 肝脏解毒专家\n\n针对应酬多、作息乱的都市人群。维C+谷胱甘肽+乙酰半胱氨酸三重抗氧化，高效护肝解毒。特别适合酒精代谢需求高、肝功异常或长期熬夜的人群。输注仅需1小时10分钟。\n\n**核心卖点**：护肝+美白双重效益，含谷胱甘肽提亮肤色。\n\n---\n\n### NAD+ 元气修复能量针 — 抗衰旗舰\n\nGZU Wellness 的旗舰产品。NAD+复合辅酶（国药准字200单位）+谷胱甘肽+VC+胸腺法新的联合处方。单次输注1小时45分钟（也可选择50分钟肌注）。针对抗衰老需求客户，直接作用于线粒体功能提升和细胞能量代谢。\n\n**核心卖点**：国药准字复合辅酶，科学联合配方而非单一高剂量。抗衰+免疫+神经保护三重效益。",
     "tokens_est": 486
   },
   {
-    "id": 8,
+    "id": 25,
     "title": "qa_常见问题",
     "content": "# GZU Wellness 常见Q&A\n\n> 共 27 条常见问题与专业解答，覆盖 NAD+、Vitaglow、Proboost 等全线产品",
     "tokens_est": 35
   },
   {
-    "id": 9,
+    "id": 26,
     "title": "qa_常见问题",
     "content": "## Q: 别人家的NAD+是xx mg的，你们家的NAD+针是多少单位的？\n\n您可能听到的\"100mg、200mg NAD+\"，通常指的是单一的NAD+前体（如烟酰胺）或纯度不一的化合物。\n我们医院提供的是完全合规、有明确药品批文的静脉输注治疗方案，而不是市面上一些机构自行调配的、成分和纯度存疑的所谓\"高剂量NAD+\"\n它的优势不在于单一成分的毫克数，而在于：\n\n**科学配比**：我们的是联合配方，谷胱甘肽和VC能互相再生，维持强大的抗氧化池，这直接保护了NAD+前体，让它更有效地发挥作用。没有这个保护，补充的\"原料\"可能被过多的自由基消耗掉。加入胸腺法新，是直接针对\"免疫衰老\"这个衰老的标志性特征。这体现了更深层次干预衰老的临床思维。剂量是\"量\"的层面，而联合处方是\"质\"和\"策略\"的层面。我们追求的是系统收益。\n\n**稳定释放**：复合配方能使有效成分更平缓、持久地在体内释放和利用，避免单一高剂量成分可能带来的代谢压力或快速消耗。\n\n---",
     "tokens_est": 214
   },
   {
-    "id": 10,
+    "id": 27,
     "title": "qa_常见问题",
     "content": "## Q: 客户直接问：\"你们的NAD+是多少毫克的？\"\n\n**【专业导向】** 我们使用的是国药准字的复合辅酶，它的设计理念不是追求单一成分的高毫克数，而是通过多种能量辅酶的精准配比，更安全、高效地激活您体内的NAD+代谢通路，实现1+1>2的细胞赋能效果\n\n**【安全导向】** 毫克数只是一个参考。在医疗领域，安全性是第一位的。我们的方案是经药监局批准的，确保每一滴进入您血管的液体都绝对纯净、安全。在此基础上，医生会根据您的体感和生化指标，动态调整到最适合您的\"有效剂量\"，这才是负责任的做法\n\n**【综合导向】** NAD+我们用的是国药准字的复合辅酶，200单位的。这个套组我们也联合使用了谷胱甘肽和维生素C，以及胸腺法新，可以让效能和收益更佳。因为谷胱甘肽和维生素C能互相再生，维持强大的抗氧化池，这直接保护了NAD+前体，让它更有效地发挥作用。没有这个保护，补充的\"原料\"可能被过多的自由基消耗掉。胸腺法新是免疫调节剂，针对的是\"免疫衰老\"这个衰老的标志性特征。如果您之前有了解，可能有的宣传是以\"纯度\"作为唯一标准，实际上我们是看综合效用。\n\n---",
     "tokens_est": 242
   },
   {
-    "id": 11,
+    "id": 28,
     "title": "qa_常见问题",
     "content": "## Q: 客户说\"别人家都说输200mg，你们这个是不是效果不够？\"\n\n我完全理解您的比较。这好比补充维生素，一次性吃很大剂量，身体吸收不了会排出，甚至造成负担；而每天适量补充，身体才能平稳利用。抗衰老是\"持久战\"，不是\"冲刺跑\"。我们的方案追求的是在绝对安全的前提下，通过优化您自身的代谢循环，实现稳定、持续的效果。很多追求单一高剂量的客户后来转到我们这里，正是因为发现我们的方案体感更舒适，效果的维持时间也更长\n\n---",
     "tokens_est": 106
   },
   {
-    "id": 12,
+    "id": 29,
     "title": "qa_常见问题",
     "content": "## Q: 关于9F rTMS的说明\n\n（9F使用的保健版）rtms的参数设置是比较温和的，前两次给您一个适应期。如果您觉得有需要，我们也能为您安排脑健康中心的专科主任再为您评估，以及个性化地调整参数\n\n---",
     "tokens_est": 52
   },
   {
-    "id": 13,
+    "id": 30,
     "title": "qa_常见问题",
     "content": "## Q: 抗衰维度的血浆置换有没有前后数据对比？单次的血液过滤量多少？疗程怎么样？双泵还是单泵的？\n\n**是否有前后数据对比？**\n我们在每次治疗后都会对相关指标（如端粒长度、生物时钟等）进行检测。单次治疗后变化可能不显著，我们会持续跟踪记录，为客户提供完整的数据支持和状态改善的评估。\n\n**单次血液过滤量是多少？**\n单次治疗可实现约 1–1.5个血浆当量 的置换，具体根据个体情况调整。我们的设备能够高效、安全地完成血浆分离与替换。\n\n**是否可以循环进行？建议频率如何？**\n如您主要想了解的是疗程安排，我们推荐的治疗周期为：连续3个月，每月进行2次，共6次。这样的频率有助于维持治疗效果，并配合身体代谢节奏，达到相对理想的抗衰调理目的。\n\n**设备配置说明**\n我们采用的是金宝品牌的多泵系统，配备一个高流量血液泵和四个高流量液体泵，整个置换过程稳定、高效、安全\n\n---",
     "tokens_est": 196
   },
   {
-    "id": 14,
+    "id": 31,
     "title": "qa_常见问题",
     "content": "## Q: 输注完NAD+之后的注意事项有哪些？\n\n您好，我们想随访一下您输注完NAD+之后的感受，是否还适应呢？NAD+代谢过程会增加身体对水分的需求。建议在接下来24小时内多饮用温水（每日约1500–2000ml），这几天要保证充足睡眠，给身体一个温和适应期~ 有任何疑问可以随时联系我们~\n\n**详细注意事项：**\n\n💧 **充分补水**：建议在接下来24小时内多饮用温水（每日约1500–2000ml），有助于促进代谢、减轻可能的轻微不适。\n\n🍽️ **清淡饮食，避免刺激**：输注后24小时内建议以清淡、易消化的食物为主，避免高脂、辛辣刺激、酒精及高咖啡因饮品。\n\n😴 **保证充足休息**：NAD+有助于提升能量水平，但建议输注后至少6小时内避免剧烈的高强度运动或重体力劳动，当天保证充足睡眠。\n\n🌿 **注意身体反应**：极少数人可能出现轻微头痛、恶心、胸闷或潮热感，通常会在数小时内自行缓解。如症状持续或加重，请及时联系我们。\n\n📅 **坚持疗程效果更佳**：NAD+的效果具有累积性。非常建议您按计划完成输注，并配合健康生活方式。\n\n---",
     "tokens_est": 242
   },
   {
-    "id": 15,
+    "id": 32,
     "title": "qa_常见问题",
     "content": "## Q: 输注完Vitaglow之后的注意事项有哪些？\n\n您好，我们想随访一下您输注完Vitaglow 肝净能量针之后的感受。肝净能量针中的核心成分是谷胱甘肽，它会在您的体内参与解读过程，建议您在输注后的24小时内多饮用温开水（约1500-2000ml）帮助身体排出代谢产物。\n\n💧 **多喝水，促进代谢**：建议输注后24小时内多饮用温开水（约1500–2000ml），帮助身体排出代谢产物。\n\n🌞 **注意防晒，避免反黑**：谷胱甘肽和维生素C具有美白提亮作用，皮肤在代谢更新期间对紫外线更敏感。输注后3–7天内非常建议加强防晒（SPF30+以上，PA+++）。\n\n🍽️ **饮食清淡**：建议当天避免大量酒精、辛辣、油炸及高糖食物，可适量补充富含维生素C和优质蛋白的食物。\n\n😴 **保证休息**：良好的睡眠有助于肝脏修复与谷胱甘肽再生。建议当晚早睡。\n\n🚫 **避免立即剧烈运动**：输注后6小时内请避免高强度运动或桑拿、高温瑜伽等。\n\n---",
     "tokens_est": 216
   },
   {
-    "id": 16,
+    "id": 33,
     "title": "qa_常见问题",
     "content": "## Q: 输注完Proboost之后的注意事项有哪些？\n\n💧 **充分补水，促进代谢与吸收**：建议在24小时内饮用1500–2000ml温开水。\n\n🍽 **饮食均衡清淡**：优先补充优质蛋白（如鱼、蛋、瘦肉、豆制品），避免辛辣、油腻、酒精及高糖食物。\n\n😴 **保证充分休息**：输注后当天应避免熬夜、过度劳累或剧烈运动。\n\n⚠ **关注身体信号**：由于含有免疫球蛋白等高活性成分，极少数人可能在输注后出现短暂、轻微的低热、乏力、肌肉酸痛或局部皮疹，一般会在几小时内自行缓解。\n\n🌡 **短期内避免特定活动**：输注后6-8小时内避免蒸桑拿、泡温泉、长时间热水浴及高强度运动。\n\n---",
     "tokens_est": 150
   },
   {
-    "id": 17,
+    "id": 34,
     "title": "qa_常见问题",
     "content": "## Q: 输注完Proboost之后感到口干、疲惫是什么原因？\n\nProboost能量针里面的核心成分是维生素C+谷胱甘肽+磷酸肌酸钠+免疫球蛋白。维生素C和磷酸肌酸钠代谢的时候会需要更多的水分，所以您这两天要注意补充水分。建议每天补充1500-2000ml的温水。\n\n输注之后感到轻微疲惫，是因为免疫球蛋白在激活您的免疫系统，可能会出现短暂的乏力困倦。这个是正常反应。这两天早些休息，保证充足睡眠。\n\n---",
     "tokens_est": 103
   },
   {
-    "id": 18,
+    "id": 35,
     "title": "qa_常见问题",
     "content": "## Q: 输注完Hydromax之后的注意事项有哪些？\n\n💧 **充分补水，促进代谢**：建议输注后24小时内多喝温水（约1500–2000ml）。\n\n🍽️ **清淡饮食，避免高钾高镁食物**：24小时内请避免短时大量摄入高钾食物（如香蕉、橙子、土豆）或高镁食物（如坚果、豆类）。\n\n🌿 **注意身体反应**：极少数人可能出现轻微胃部不适、口中异味，通常在几小时内自行缓解。\n\n---",
     "tokens_est": 98
   },
   {
-    "id": 19,
+    "id": 36,
     "title": "qa_常见问题",
     "content": "## Q: 输注完Coreboost之后的注意事项有哪些？\n\n💧 **充分补水**：24小时内多喝温水（约1500–2000ml）。\n\n🍽️ **清淡饮食**：避免辛辣、油腻、酒精、浓茶或高糖饮料。\n\n😴 **保证充足休息**：部分人输注后会感觉精力充沛，也可能伴随短暂疲劳或轻微头晕。\n\n🌿 **注意身体反应**：极少数人可能出现轻微心悸、胃部不适、口中异味，通常在几小时内自行缓解。\n\n---",
     "tokens_est": 101
   },
   {
-    "id": 20,
+    "id": 37,
     "title": "qa_常见问题",
     "content": "## Q: 打能量针的间隔时间有什么推荐吗？\n\n一般一个月就可以打一次。比较多客人会维持在1～3 个月打一次的频率，根据您的实际感受可以调整的。\n\n一般建议是1-2个月输注的，具体也看您的身体对能量针的适应程度以及当期的状态。如果状态很好，时间间隔得久一些也可以，如果觉得近期抵抗力弱、深度疲惫等等亚健康状态，可以适当安排输注。\n\n---",
     "tokens_est": 84
   },
   {
-    "id": 21,
+    "id": 38,
     "title": "qa_常见问题",
     "content": "## Q: 全基因外显子检测的介绍\n\n全基因外显子检测我们是外送金域医学去做，使用最新的全外显子组测序技术，检测2万+个基因，覆盖3000万个位点，据金域介绍准确率可达到99%。我们的好几位主任都做了这个检测，根据他们的反馈非常有参考价值。现在的套餐价格是5980，包含全外显子基因检测和2次医生咨询（检测前/检测后）。这个检测一生做一次就够了。\n\n---",
     "tokens_est": 89
   },
   {
-    "id": 22,
+    "id": 39,
     "title": "qa_常见问题",
     "content": "## Q: 体外反搏对耳鸣的作用原理是？\n\n体外反搏可能对耳鸣有帮助的机制主要是可以改善内耳微循环。耳鸣（尤其是感音神经性耳鸣）常与内耳供血不足有关。体外反搏通过在心脏舒张期对下肢及臀部气囊加压，增加主动脉舒张压，从而提高全身包括内耳的血流灌注，有助于改善内耳缺血状态，从而改善耳鸣。\n\n---",
     "tokens_est": 73
   },
   {
-    "id": 23,
+    "id": 40,
     "title": "qa_常见问题",
     "content": "## Q: 哺乳期可以打能量针吗？\n\n我们不建议在哺乳期打能量针，因为我们都是通过静脉来输注也就意味着这个药剂会入血。建议您过了哺乳期之后再打营养针。那如果是您觉得在哺乳期间可能会比较疲惫，睡眠质量比较受影响的话呢，可以考虑过来做微压氧疗或者是深眠磁疗这些无创的项目。\n\n---",
     "tokens_est": 69
   },
   {
-    "id": 24,
+    "id": 41,
     "title": "qa_常见问题",
     "content": "## Q: 女性状态解码整体的时间大概需要多久？主要做的是哪些项目？\n\n女性解码的检查时间大概是1 ~ 1.5小时，主要会进行抽血、粪便采样（做肠道微生物检测）以及妇检（可选）。其中有一项是卵巢功能指标，经期和非经期都可以做。有一部分报告是外送的，预计是7-15天。\n\n---",
     "tokens_est": 69
   },
   {
-    "id": 25,
+    "id": 42,
     "title": "qa_常见问题",
     "content": "## Q: 微压氧舱一般做多久？\n\n微压氧疗首次在舱内的时间是40分钟，如果身体适应良好的话可以适当延长，舱内时间不超过60分钟。\n\n---",
     "tokens_est": 35
   },
   {
-    "id": 26,
+    "id": 43,
     "title": "qa_常见问题",
     "content": "## Q: 关于深眠磁疗rTMS的介绍话术\n\n深眠磁疗rTMS是通过精准的脉冲磁场来作用于您的大脑特定区域，帮助调节和优化神经细胞功能。主要是有助于提升深睡比例，缓解大脑疲劳和改善睡眠质量的。\n\n---",
     "tokens_est": 50
   },
   {
-    "id": 27,
+    "id": 44,
     "title": "qa_常见问题",
     "content": "## Q: TPE预约安排及费用咨询\n\n所有TPE治疗前均需经过童荔主任面诊评估。门诊预约在童荔主任Internal Medicine班表上，面诊地点安排在【4楼减重中心一号诊室】。TPE是稀缺医疗资源，按照套餐价格，没有渠道价格。",
     "tokens_est": 58
+  },
+  {
+    "id": 45,
+    "title": "website_官网",
+    "content": "# GZU Wellness 官网介绍\n\n> 来源: https://gzu-wellness-longevity-center.com",
+    "tokens_est": 34
+  },
+  {
+    "id": 46,
+    "title": "website_官网",
+    "content": "## 中心简介\n\n卓越健康与长寿中心，立足国际化医学标准，融合精准检测、生物治疗、营养调理、功能医学干预等多种手段，为亚健康人群、高压职场人群及健康积极管理者提供\"预防 - 评估 - 干预 - 管理\"一体化服务。",
+    "tokens_est": 53
+  },
+  {
+    "id": 47,
+    "title": "website_官网",
+    "content": "## 核心优势\n\n- 专业医疗背景：依托和睦家医疗平台，多学科团队协作管理\n- 设备耗材精良：全部采用国际品牌医疗设备与一次性高端耗材\n- 私密舒适环境：独立诊疗区，营造安心、静谧、个性化体验\n- 多语种无障碍沟通：支持中文、英语、粤语、德语、日语、西班牙语\n\n卓越健康与长寿中心 | Wellness & Longevity Center 卓越健康与长寿中心 WELLNESS & LONGEVITY CENTER 中心简介 精准检测 药物提升 科技焕活 机能重塑 中医调理 中心环境 中 / EN PRECISION WELLNESS · PRIVATE MEDICAL SUPPORT 卓越健康与长寿中心 科学赋能健康 · 焕活生命潜能 From \"preventive care\" to \"longevity promotion\", embark on a journey of comprehensive mind-body renewal. 了解中心 查看服务 ABOUT US 中心简介 Center Introduction 卓越健康与长寿中心，立足国际化医学标准，融合精准检测、生物治疗、营养调理、功能医学干预等多种手段，为亚健康人群、高压职场人群及健康积极管理者提供\"预防 - 评估 - 干预 - 管理\"一体化服务。 我们致力于打造一个跨学科协作、兼顾科学性与体验感的健康管理空间，让健康成为一种生活方式，助力客户激活细胞能量、改善健康状态、实现长期的高质量健康生活。 精准状态分析 激素水平、生物年龄、营养代谢、微生态平衡等。聚焦状态解析与慢病风险早筛。 IV营养疗法 多款定制配方（如能量提升、肝脏排毒、免疫增强、抗氧修复）。采用德国进口B. Braun高精度输液泵、美国BD静脉留置系统，保障疗效与安全。 微压氧疗服务 促进脑部血氧供给、缓解疲劳、加速恢复。舱内可舒适阅读、冥想，适合职场疲劳/运动后修复人群。 核心优势 01 专业医疗背景 依托和睦家医疗平台，多学科团队协作管理 02 设备耗材精良 全部采用国际品牌医疗设备与一次性高端耗材 03 私密舒适环境 独立诊疗区，营造安心、静谧、个性化体验 04 多语种无障碍沟通 支持中文、英语、粤语、德语、日语、西班牙语 适用人群 渴望改善代谢、维持高效状态的精英人士 经常疲劳、压力大、睡眠差、代谢紊乱的亚健康人群 希望在疾病出现前进行健康干预、科学养护的前瞻型人群 有海外健康管理经验，追求国际医疗标准的客户 PRECISION DETECTION 精准检测 Comprehensive Health Assessment 从基因密码到免疫时钟，从营养全景到皮肤解码，我们提供多维度的精准健康评估，让每一次健康管理决策都有据可依。 01 GeneDecoding 全外显子组基因测序 ¥5,980 一检终身，获取人生健康导航 医学级人体全套基因体检，涵盖20000+基因，一生只需做一次的\"生命健康说明书\"。从你的DNA中，通过特定技术\"抓取\"出最关键、最富含信息的1%（外显子组）进行高效、精准的解读，为你揭示：你与生俱来的健康优势与营养需求、身体对不同药物和环境的独特反应、潜在的健康风险与科学的预防方向。 安全用药指导 肿瘤慢病防控 生育健康管理 疾病风险预警 适用人群： 备孕夫妇及遗传风险家庭 · 深度健康管理关注者 · 用药安全高风险人群 · 中老年健康自主改善群体 02 Complete Vitamin Test 全套维生素检测 ¥1,800 一次全面的\"身体资源盘点\" 医学级体内维生素全景检测，一次采样，全面评估15项关键维生素水平，精准量化你身体真正\"用得上\"的营养素含量，为你揭示：身体处于怎样的营养状态、哪些维生素正在\"报警\"、你的代谢机制是否存在吸收障碍、如何通过精准补充达成最优健康状态。 全面营养评估 隐性缺乏发现 代谢障碍解析 精准补充指导 适用人群： 长期感觉疲劳、精力不济者 · 关注头发、皮肤、指甲健康者 · 饮食不规律、常吃外卖的职场人 · 备孕及关注长期健康规划者 03 SkinGene Test 皮肤基因检测 ¥1,800 解码肌肤密码，预见你的专属美丽 获取专属你的\"皮肤使用说明书\"。通过医学级基因分析，深入解读你与生俱来的皮肤特质，为你揭示：你的皮肤天生是哪种类型、衰老速度如何、哪些外在因素最容易伤害你、什么样的护肤方式真正适合你。 抗氧化能力 胶原蛋白流失 黑色素生成 敏感倾向分析 适用人群： 护肤投入不少但效果不佳者 · 关注抗衰老希望精准护肤的人群 · 敏感肌肤反复出现问题者 · 希望从根源了解自己皮肤特性人士 04 Immune Clock 免疫时钟 ¥1,800 预见免疫，解码时光印迹 免疫时钟检测是一项先进的健康评估技术，通过分析血液，检测免疫系统的状态和活跃程度，从而评估出身体的\"免疫年龄\"。这个年龄能帮你了解自己身体的真实衰老节奏，提前发现健康风险，就像给免疫系统做了一次\"年度体检\"，让健康管理更有预见性。 精准测龄 深度解析 量化风险 前瞻预警 适用人群： 高压熬夜人群 · 慢性炎症/反复过敏 · 长期体重管理/健身人群 · 长期疲惫 · 中老年健康管理人群 · 术后及康复人群 05 Manalyze 男性状态解码 ¥9,980 多维解码，重启高能人生 专为现代男性打造，结合国际前沿检测技术，从激素平衡、骨骼健康、营养元素、抗氧化能力到肠道微生态，全方位洞察亚健康与潜在隐患。科学提升精力、体能、认知与自信，实现男性专属的全面进阶。 检测模块 全套男性荷尔蒙评估 骨代谢健康评估 全套维生素检测 辅酶Q10检测 氨基酸分析 营养及毒性元素分析 肠道菌群微生态检测 适用人群： 职场压力大、作息不规律的都市男性 · 关注自我健康管理、希望延缓衰老的男性 · 有慢性疲劳、免疫力低下等亚健康表现者 06 Femalyze 女性状态解码 ¥9,980 多维解码，焕新每一天 聚焦女性核心健康指标，结合国际前沿检测技术，从激素平衡、骨骼代",
+    "tokens_est": 4010
   }
 ]
