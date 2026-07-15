@@ -7,7 +7,7 @@ compatibility_date = "2024-12-01"
 # 也可以在 Cloudflare Dashboard > Workers > Settings > Variables 中设置
 [vars]
 AI_PROVIDER = "deepseek"
-CHUNKS_URL = "https://raw.githubusercontent.com/liuyx339-oss/gzu-wellness-qa/main/data/chunks.json"
+CHUNKS_URL = "https://raw.githubusercontent.com/liuyx339-oss/gzu-wellness-qa/master/data/chunks.json"
 
 # 敏感信息用 secret 存储（不要明文写在这里）:
 # wrangler secret put AI_API_KEY
