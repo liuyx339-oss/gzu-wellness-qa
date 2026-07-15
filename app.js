@@ -30,6 +30,7 @@ function getConfig() {
 // ===== DOM =====
 const questionInput = document.getElementById('questionInput');
 const askBtn = document.getElementById('askBtn');
+const micBtn = document.getElementById('micBtn');
 const chatArea = document.getElementById('chatArea');
 const emptyState = document.getElementById('emptyState');
 const loading = document.getElementById('loading');
@@ -191,6 +192,57 @@ document.querySelectorAll('.example').forEach(el => {
 
 // ===== Init =====
 updateBadge();
+if (!SpeechRecognition) micBtn.style.display = 'none';
+
+// ===== Voice Input (Web Speech API) =====
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let isRecording = false;
+let recognition = null;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang = 'zh-CN';
+  recognition.interimResults = true;
+  recognition.continuous = false;
+
+  recognition.onresult = (event) => {
+    let transcript = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    questionInput.value = transcript;
+    questionInput.style.height = 'auto';
+    questionInput.style.height = Math.min(questionInput.scrollHeight, 120) + 'px';
+  };
+
+  recognition.onend = () => {
+    micBtn.classList.remove('recording');
+    micBtn.textContent = '🎤';
+    isRecording = false;
+  };
+
+  recognition.onerror = (event) => {
+    console.log('Speech error:', event.error);
+    micBtn.classList.remove('recording');
+    micBtn.textContent = '🎤';
+    isRecording = false;
+  };
+}
+
+micBtn.addEventListener('click', () => {
+  if (!SpeechRecognition) {
+    alert('你的浏览器不支持语音输入，请使用 Chrome 或 Edge');
+    return;
+  }
+  if (isRecording) {
+    recognition.stop();
+  } else {
+    recognition.start();
+    micBtn.classList.add('recording');
+    micBtn.textContent = '🔴';
+    isRecording = true;
+  }
+});
 
 // ===== Core Logic =====
 async function handleAsk() {
