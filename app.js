@@ -225,9 +225,23 @@ micBtn.addEventListener('click', async () => {
         return;
       }
 
-      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      const webmBlob = new Blob(audioChunks, { type: 'audio/webm' });
+
+      // 用 Web Audio API 解码 webm → 转为 WAV（Whisper 最优格式）
+      let audioBlob;
+      try {
+        const arrayBuf = await webmBlob.arrayBuffer();
+        const audioCtx = new AudioContext();
+        const decoded = await audioCtx.decodeAudioData(arrayBuf);
+        audioBlob = audioBufferToWav(decoded);
+        audioCtx.close();
+      } catch (e) {
+        // 降级：直接用 webm
+        audioBlob = webmBlob;
+      }
+
       const form = new FormData();
-      form.append('audio', audioBlob, 'recording.webm');
+      form.append('audio', audioBlob, 'recording.wav');
 
       try {
         const resp = await fetch(`${WORKER_URL}/api/speech`, { method: 'POST', body: form });
@@ -373,6 +387,47 @@ function renderError(question, message) {
   card.appendChild(errCard);
   chatArea.prepend(card);
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 将 AudioBuffer 转为 WAV Blob
+function audioBufferToWav(buffer) {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const format = 1; // PCM
+  const bitsPerSample = 16;
+  const data = buffer.getChannelData(0);
+  const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+  const blockAlign = numChannels * bitsPerSample / 8;
+  const dataSize = data.length * numChannels * bitsPerSample / 8;
+  const headerSize = 44;
+  const totalSize = headerSize + dataSize;
+
+  const arr = new ArrayBuffer(totalSize);
+  const view = new DataView(arr);
+
+  const w = (off, str) => { for (let i=0;i<str.length;i++) view.setUint8(off+i, str.charCodeAt(i)); };
+  w(0, 'RIFF');
+  view.setUint32(4, totalSize - 8, true);
+  w(8, 'WAVE');
+  w(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, format, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+  w(36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  let offset = 44;
+  for (let i = 0; i < data.length; i++) {
+    const sample = Math.max(-1, Math.min(1, data[i]));
+    view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+    offset += 2;
+  }
+
+  return new Blob([arr], { type: 'audio/wav' });
 }
 
 function escapeHtml(str) {

@@ -458,30 +458,18 @@ export default {
 
     const url = new URL(request.url);
 
-    // ===== 路由 /api/speech（Cloudflare AI Whisper large-v3-turbo，免费）=====
+    // ===== 路由 /api/speech（Cloudflare AI Whisper）=====
     if (url.pathname === '/api/speech' && request.method === 'POST') {
       try {
         const formData = await request.formData();
-        const audio = formData.get('audio');
-        if (!audio) {
+        const audioFile = formData.get('audio');
+        if (!audioFile) {
           return Response.json({ error: '请提供音频' }, { status: 400, headers: corsHeaders });
         }
-        const audioBytes = new Uint8Array(await audio.arrayBuffer());
-
-        // Cloudflare AI Whisper 期望 audio 为 base64 字符串
-        let base64 = '';
-        const chunk = 0x8000;
-        for (let i = 0; i < audioBytes.length; i += chunk) {
-          base64 += String.fromCharCode.apply(null, audioBytes.subarray(i, i + chunk));
-        }
-        base64 = btoa(base64);
 
         const result = await env.AI.run('@cf/openai/whisper', {
-          audio: base64,
-          task: 'transcribe',
-          language: 'zh',
+          audio: [...new Uint8Array(await audioFile.arrayBuffer())],
         });
-
         return Response.json({ text: result.text || '' }, { headers: corsHeaders });
 
       } catch (err) {
