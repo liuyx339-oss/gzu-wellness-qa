@@ -3,7 +3,7 @@
  *
  * 配置：部署前修改 WORKER_URL 为你的 Cloudflare Worker 地址
  */
-const WORKER_URL = 'https://your-worker.your-subdomain.workers.dev';
+const WORKER_URL = 'https://gzu-wellness-qa.gzu-wellness.workers.dev';
 
 // ===== DOM Elements =====
 const questionInput = document.getElementById('questionInput');
