@@ -86,6 +86,9 @@ const SYNONYM_MAP = {
   "备孕": "备孕 生育 基因 遗传",
   "心脏": "心脏 体外反搏 心脏活力 心血管",
   "耳鸣": "耳鸣 微循环 供血 体外反搏",
+  "多少钱": "价格 费用 定价 套餐价",
+  "怎么": "如何 方式 方法 步骤",
+  "什么": "哪些 哪款 推荐 介绍",
 };
 
 // 核心关键词列表（用于权重加分）
@@ -148,27 +151,27 @@ function keywordScore(queryText, chunkContent, chunkTitle) {
   const combined = (chunkTitle + ' ' + chunkContent).toLowerCase();
   let score = 0;
 
-  // 检查核心关键词是否命中
+  // 核心关键词权重加成
   for (const [kw, weight] of Object.entries(KEYWORD_WEIGHTS)) {
-    if (queryText.includes(kw) && combined.includes(kw)) {
+    if (combined.includes(kw) && queryText.includes(kw)) {
       score += weight;
     }
   }
 
-  // 扩展后的查询词命中加分
-  const expandedQuery = expandQuery(queryText);
-  const queryWords = expandedQuery.split(/\s+/).filter(w => w.length > 1);
+  // queryText 已经是扩展后的查询，直接用词匹配
+  const queryWords = queryText.split(/\s+/).filter(w => w.length > 1);
   for (const word of queryWords) {
     if (combined.includes(word)) {
       score += 0.5;
     }
   }
 
-  // 中文字串直接命中高权重
+  // 中文字串直接命中（在原始查询和chunk中都出现才加分）
+  const chineseOnly = queryText.replace(/[^一-龥]+/g, '');
   for (let len = 4; len >= 2; len--) {
-    for (let i = 0; i <= queryText.length - len; i++) {
-      const sub = queryText.substring(i, i + len);
-      if (/[一-龥]/.test(sub) && combined.includes(sub)) {
+    for (let i = 0; i <= chineseOnly.length - len; i++) {
+      const sub = chineseOnly.substring(i, i + len);
+      if (combined.includes(sub)) {
         score += len * 0.8;
       }
     }
@@ -195,7 +198,8 @@ function jaccardSimilarity(setA, setB) {
 function searchChunks(question, chunks, topK = TOP_K) {
   const expanded = expandQuery(question);
   const queryTokens = new Set(extractKeywords(expanded));
-  const queryLow = question.toLowerCase();
+  // keywordScore 用扩展后的查询，确保同义词也能命中权重
+  const expandedLow = expanded.toLowerCase();
 
   const scored = chunks.map((chunk, index) => {
     const chunkTokens = new Set(extractKeywords(chunk.content));
@@ -205,8 +209,8 @@ function searchChunks(question, chunks, topK = TOP_K) {
     const contentJacc = jaccardSimilarity(queryTokens, chunkTokens);
     const titleJacc = jaccardSimilarity(queryTokens, titleTokens) * 3.0;
 
-    // 关键词命中得分
-    const kwScore = keywordScore(queryLow, chunk.content, chunk.title);
+    // 关键词命中得分（用扩展后的查询）
+    const kwScore = keywordScore(expandedLow, chunk.content, chunk.title);
 
     // 加权总分
     const score = contentJacc * 2 + titleJacc * 3 + kwScore * 1.5;
@@ -447,6 +451,30 @@ export default {
     }
 
     const url = new URL(request.url);
+
+    // ===== 路由 /api/debug（调试：只看搜索不打AI）=====
+    if (url.pathname === '/api/debug' && request.method === 'POST') {
+      try {
+        const body = await request.json();
+        const q = body.question?.trim() || '';
+        const chunks = await getChunks(env);
+        const expanded = expandQuery(q);
+        const results = searchChunks(q, chunks, 10);
+        return Response.json({
+          question: q,
+          expandedQuery: expanded,
+          totalChunks: chunks.length,
+          found: results.length,
+          top: results.slice(0, 5).map(r => ({
+            title: r.chunk.title,
+            content: r.chunk.content.substring(0, 200),
+            score: Math.round(r.score * 100) / 100,
+          })),
+        }, { headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json; charset=utf-8' } });
+      } catch (err) {
+        return Response.json({ error: err.message }, { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } });
+      }
+    }
 
     // ===== 路由 /api/add-knowledge =====
     if (url.pathname === '/api/add-knowledge' && request.method === 'POST') {
