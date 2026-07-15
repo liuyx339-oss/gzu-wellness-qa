@@ -9,5 +9,9 @@ compatibility_date = "2024-12-01"
 AI_PROVIDER = "deepseek"
 CHUNKS_URL = "https://raw.githubusercontent.com/liuyx339-oss/gzu-wellness-qa/master/data/chunks.json"
 
+# AI 绑定（Cloudflare Workers AI - Whisper 语音转文字）
+[ai]
+binding = "AI"
+
 # 敏感信息用 secret 存储（不要明文写在这里）:
 # wrangler secret put AI_API_KEY

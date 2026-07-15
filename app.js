@@ -190,134 +190,66 @@ document.querySelectorAll('.example').forEach(el => {
   });
 });
 
-// ===== Voice Input (纯浏览器端 sherpa-onnx，零API依赖) =====
+// ===== Voice Input (录音 → Worker → Cloudflare AI Whisper) =====
 let isRecording = false;
-let audioCtx = null;
-let mediaStream = null;
-let sherpaRecognizer = null;
-let sherpaStream = null;
-let sherpaStatus = 'idle'; // 'idle' | 'loading' | 'ready' | 'error'
-
-async function loadSherpa() {
-  if (sherpaStatus === 'ready') return true;
-  if (sherpaStatus === 'loading') return false;
-
-  sherpaStatus = 'loading';
-  micBtn.textContent = '📥';
-  micBtn.disabled = true;
-  micBtn.title = '正在下载语音模型(约25MB，仅首次)...';
-
-  try {
-    const { createOnlineRecognizer, OnlineRecognizer } = await import(
-      'https://cdn.jsdelivr.net/npm/sherpa-onnx@2.1.18/wasm/sherpa-onnx-asr.js'
-    );
-
-    const base = 'https://huggingface.co/csukuangfj/sherpa-onnx-zipformer-zh-14m-2023-02-23/resolve/main';
-
-    sherpaRecognizer = createOnlineRecognizer(
-      {
-        modelConfig: {
-          transducer: {
-            encoder: base + '/encoder-epoch-99-avg-1.onnx',
-            decoder: base + '/decoder-epoch-99-avg-1.onnx',
-            joiner: base + '/joiner-epoch-99-avg-1.onnx',
-          },
-          tokens: base + '/tokens.txt',
-          modelType: 'zipformer2',
-        },
-        enableEndpoint: 1,
-        rule1MinTrailingSilence: 2.4,
-        rule2MinTrailingSilence: 1.2,
-        rule3MinUtteranceLength: 20.0,
-      },
-    );
-
-    sherpaStream = sherpaRecognizer.createStream();
-    sherpaStatus = 'ready';
-
-    micBtn.textContent = '🎤';
-    micBtn.disabled = false;
-    micBtn.title = '语音输入';
-    return true;
-
-  } catch (err) {
-    console.error('Sherpa load:', err);
-    sherpaStatus = 'error';
-    micBtn.textContent = '⚠️';
-    micBtn.disabled = false;
-    micBtn.title = '加载失败，点击重试';
-    alert('语音模型加载失败（可能网络问题），请稍后重试');
-    return false;
-  }
-}
+let mediaRecorder = null;
+let audioChunks = [];
 
 micBtn.addEventListener('click', async () => {
-  // 加载模型
-  if (sherpaStatus === 'error') sherpaStatus = 'idle';
-  if (sherpaStatus !== 'ready') {
-    const ok = await loadSherpa();
-    if (!ok) return;
-  }
-
   if (isRecording) {
-    // 停止录音
+    mediaRecorder.stop();
     micBtn.classList.remove('recording');
-    micBtn.textContent = '🎤';
-    isRecording = false;
-
-    if (mediaStream) {
-      mediaStream.getTracks().forEach(t => t.stop());
-      mediaStream = null;
-    }
-    if (audioCtx) { audioCtx.close(); audioCtx = null; }
-
-    // 获取最终结果
-    if (sherpaRecognizer && sherpaStream) {
-      sherpaRecognizer.inputFinished(sherpaStream);
-      while (sherpaRecognizer.isReady(sherpaStream)) {
-        sherpaRecognizer.decode(sherpaStream);
-      }
-      const result = sherpaRecognizer.getResult(sherpaStream);
-      if (result?.text) questionInput.value = result.text;
-      sherpaStream = sherpaRecognizer.createStream();
-    }
+    micBtn.textContent = '⏳';
+    micBtn.disabled = true;
     return;
   }
 
-  // 开始录音
   try {
-    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    audioCtx = new AudioContext({ sampleRate: 16000 });
-    const source = audioCtx.createMediaStreamSource(mediaStream);
-    const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+    mediaRecorder = new MediaRecorder(stream, { mimeType });
+    audioChunks = [];
 
-    source.connect(processor);
-    processor.connect(audioCtx.destination);
-
-    processor.onaudioprocess = (event) => {
-      if (!isRecording || sherpaStatus !== 'ready') return;
-      const input = event.inputBuffer.getChannelData(0);
-      // sherpa-onnx accepts Float32Array
-      sherpaRecognizer.acceptWaveform(sherpaStream, 16000, input);
-
-      // 实时识别
-      while (sherpaRecognizer.isReady(sherpaStream)) {
-        sherpaRecognizer.decode(sherpaStream);
-      }
-      const r = sherpaRecognizer.getResult(sherpaStream);
-      if (r?.text) questionInput.value = r.text;
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
     };
 
-    window._vp = processor;
-    window._vs = source;
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      if (audioChunks.length === 0) {
+        micBtn.textContent = '🎤';
+        micBtn.disabled = false;
+        return;
+      }
 
+      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      const form = new FormData();
+      form.append('audio', audioBlob, 'recording.' + (mimeType.includes('webm') ? 'webm' : 'wav'));
+
+      try {
+        const resp = await fetch(`${WORKER_URL}/api/speech`, {
+          method: 'POST', body: form,
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || '识别失败');
+        questionInput.value = data.text || '';
+      } catch (err) {
+        console.error('Speech error:', err);
+        alert('语音识别失败: ' + err.message);
+      } finally {
+        micBtn.textContent = '🎤';
+        micBtn.disabled = false;
+      }
+    };
+
+    mediaRecorder.start();
     micBtn.classList.add('recording');
     micBtn.textContent = '🔴';
     isRecording = true;
 
   } catch (err) {
     if (err.name === 'NotAllowedError') {
-      alert('请允许浏览器使用麦克风\n点击地址栏左侧锁图标 → 网站设置 → 允许麦克风');
+      alert('请允许浏览器使用麦克风');
     } else {
       alert('麦克风失败: ' + err.message);
     }

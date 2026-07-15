@@ -26,6 +26,12 @@ const DEEPSEEK_MODEL = 'deepseek-chat';
 const OPENAI_API = 'https://api.openai.com/v1/chat/completions';
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
 
+// 公共 CORS headers
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Content-Type': 'application/json; charset=utf-8',
+};
+
 // GitHub 配置（用于写入知识库）
 const GITHUB_OWNER = 'liuyx339-oss';
 const GITHUB_REPO = 'gzu-wellness-qa';
@@ -451,6 +457,27 @@ export default {
     }
 
     const url = new URL(request.url);
+
+    // ===== 路由 /api/speech（Cloudflare AI Whisper，免费）=====
+    if (url.pathname === '/api/speech' && request.method === 'POST') {
+      try {
+        const formData = await request.formData();
+        const audio = formData.get('audio');
+        if (!audio) {
+          return Response.json({ error: '请提供音频' }, { status: 400, headers: corsHeaders });
+        }
+        const audioBytes = new Uint8Array(await audio.arrayBuffer());
+
+        const result = await env.AI.run('@cf/openai/whisper', {
+          audio: [...audioBytes],
+        });
+
+        return Response.json({ text: result.text || '' }, { headers: corsHeaders });
+
+      } catch (err) {
+        return Response.json({ error: err.message }, { status: 500, headers: corsHeaders });
+      }
+    }
 
     // ===== 路由 /api/debug（调试：只看搜索不打AI）=====
     if (url.pathname === '/api/debug' && request.method === 'POST') {
