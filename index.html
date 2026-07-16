@@ -7,126 +7,106 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
-    <header class="header">
-      <h1>📚 Wellness 知识问答库</h1>
-      <p class="subtitle">基于飞书文档的智能问答助手</p>
-      <div class="header-actions">
-        <button class="btn-header" id="btnAdd">📝 添加知识</button>
-        <button class="btn-header" id="btnSettings">⚙️ 设置</button>
-        <span class="api-badge" id="apiBadge" style="display:none">⚡已配置</span>
-      </div>
-    </header>
+  <div class="main-layout">
+    <!-- ====== 左侧: 知识库问答 ====== -->
+    <div class="panel panel-left" id="panelLeft">
+      <header class="header">
+        <h1>📚 Wellness 知识问答</h1>
+        <p class="subtitle">AI 驱动的知识库助手</p>
+      </header>
 
-    <!-- API Settings Panel -->
-    <div class="settings-panel hidden" id="settingsPanel">
-      <div class="settings-card">
-        <h3>⚙️ API 配置</h3>
-        <p class="settings-desc">配置你的 AI API Key，数据仅保存在浏览器本地</p>
-
-        <label for="apiProvider">AI 提供商</label>
-        <select id="apiProvider">
-          <option value="deepseek">DeepSeek（推荐 · 便宜好用）</option>
-          <option value="openai">OpenAI</option>
-          <option value="anthropic">Anthropic Claude</option>
-        </select>
-
-        <label for="apiKey">API Key</label>
-        <input type="password" id="apiKey" placeholder="sk-... 或 fk...">
-        <div class="api-links">
-          <span>获取 Key：</span>
-          <a href="https://platform.deepseek.com/api_keys" class="provider-link" data-provider="deepseek" target="_blank">DeepSeek</a>
-          <a href="https://platform.openai.com/api-keys" class="provider-link" data-provider="openai" target="_blank" style="display:none">OpenAI</a>
-          <a href="https://console.anthropic.com/" class="provider-link" data-provider="anthropic" target="_blank" style="display:none">Anthropic</a>
+      <div class="search-section">
+        <div class="search-box">
+          <textarea id="questionInput" placeholder="输入问题..." rows="1"></textarea>
+          <button id="micBtn" class="btn-mic" title="语音输入">🎤</button>
+          <button id="askBtn" class="btn-ask" title="发送">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+          </button>
         </div>
-
-        <div class="settings-actions">
-          <button class="btn-save" id="btnSave">💾 保存</button>
-          <button class="btn-clear" id="btnClear">🗑 清除</button>
-        </div>
-        <p class="settings-hint">🔒 API Key 仅保存在你的浏览器 localStorage 中，不会上传到服务器</p>
+        <p class="hint">💡 <span class="example" data-question="NAD+输注后要注意什么？">NAD+输注注意事项</span></p>
       </div>
+
+      <div class="chat-area" id="chatArea"></div>
+      <div class="empty-state" id="emptyState"><div class="empty-icon">🤖</div><p>输入问题获取 AI 答案</p></div>
+      <div class="loading hidden" id="loading"><div class="typing-indicator"><span></span><span></span><span></span></div><p>查找中...</p></div>
     </div>
 
-    <!-- Add Knowledge Panel -->
-    <div class="settings-panel hidden" id="addPanel">
-      <div class="settings-card">
-        <h3>📝 添加知识</h3>
-        <p class="settings-desc">填写后提交，约 1 分钟后所有人可搜索到</p>
+    <!-- ====== 右侧: 客户信息追踪 ====== -->
+    <div class="panel panel-right" id="panelRight">
+      <header class="header">
+        <h1>👤 客户追踪</h1>
+        <p class="subtitle">输入 MRN 查询客户备注</p>
+      </header>
 
-        <div class="tabs">
-          <button class="tab active" data-tab="qa">Q&A 问答</button>
-          <button class="tab" data-tab="text">自由文本</button>
+      <div class="search-section">
+        <div class="search-box">
+          <input type="text" id="mrnInput" placeholder="输入客户 MRN...">
+          <button id="mrnBtn" class="btn-ask" title="查询">🔍</button>
         </div>
+      </div>
 
-        <div class="tab-content" id="tab-qa">
-          <label for="addQuestion">问题</label>
-          <input type="text" id="addQuestion" placeholder="例如：微压氧舱多久做一次？">
-
-          <label for="addAnswer">答案</label>
-          <textarea id="addAnswer" rows="4" placeholder="写下你的回答..."></textarea>
-        </div>
-
-        <div class="tab-content hidden" id="tab-text">
-          <label for="addTitle">标题（可选）</label>
-          <input type="text" id="addTitle" placeholder="例如：新员工手册">
-
-          <label for="addContent">内容</label>
-          <textarea id="addContent" rows="5" placeholder="粘贴或输入知识内容..."></textarea>
-        </div>
-
-        <div class="settings-actions">
-          <button class="btn-save" id="btnAddSave">📤 提交到知识库</button>
-        </div>
-        <p class="add-status" id="addStatus"></p>
+      <div class="client-results" id="mrnResults">
+        <div class="empty-state" id="mrnEmpty"><div class="empty-icon">🔎</div><p>输入 MRN 号查看客户信息</p></div>
       </div>
     </div>
+  </div>
 
-    <!-- Search Section -->
-    <div class="search-section" id="searchSection">
-      <div class="search-box">
-        <textarea
-          id="questionInput"
-          placeholder="输入你的问题，AI 将从知识库文档中查找答案..."
-          rows="1"
-          autofocus
-        ></textarea>
-        <button id="micBtn" class="btn-mic" title="语音输入">🎤</button>
-        <button id="askBtn" class="btn-ask" title="发送问题">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 2L11 13"/>
-            <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
-          </svg>
-        </button>
+  <!-- ====== 底部: 设置 & 添加知识 (双栏共享) ====== -->
+  <div class="global-bar">
+    <button id="btnSettings" class="btn-header">⚙️ 设置</button>
+    <button id="btnAdd" class="btn-header">📝 添加知识</button>
+    <span class="api-badge" id="apiBadge" style="display:none">⚡API</span>
+  </div>
+
+  <!-- 设置面板 -->
+  <div class="overlay hidden" id="settingsOverlay">
+    <div class="overlay-card">
+      <h3>⚙️ API 配置</h3>
+      <p class="settings-desc">API Key 仅保存在浏览器本地</p>
+      <label>AI 提供商</label>
+      <select id="apiProvider">
+        <option value="deepseek">DeepSeek</option>
+        <option value="openai">OpenAI</option>
+        <option value="anthropic">Anthropic</option>
+      </select>
+      <label>API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-... 或 fk...">
+      <div class="api-links">
+        <a href="https://platform.deepseek.com/api_keys" class="plink" data-provider="deepseek" target="_blank">获取 DeepSeek</a>
+        <a href="https://platform.openai.com/api-keys" class="plink" data-provider="openai" target="_blank" style="display:none">获取 OpenAI</a>
+        <a href="https://console.anthropic.com/" class="plink" data-provider="anthropic" target="_blank" style="display:none">获取 Anthropic</a>
       </div>
-      <p class="hint">💡 试试：<span class="example" data-question="NAD+输注后有什么注意事项？">NAD+输注后有什么注意事项？</span></p>
-    </div>
-
-    <!-- Answer Section -->
-    <div class="chat-area" id="chatArea"></div>
-
-    <!-- Empty State -->
-    <div class="empty-state" id="emptyState">
-      <div class="empty-icon">🤖</div>
-      <p>输入问题，获取 AI 驱动的知识库答案</p>
-    </div>
-
-    <!-- Loading -->
-    <div class="loading hidden" id="loading">
-      <div class="typing-indicator">
-        <span></span><span></span><span></span>
+      <div class="overlay-actions">
+        <button class="btn-save" id="btnSave">💾 保存</button>
+        <button class="btn-clear" id="btnClearClear">🗑 清除</button>
+        <button class="btn-close" id="btnCloseSettings">✕ 关闭</button>
       </div>
-      <p>正在查找相关文档并生成回答...</p>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <p>
-        数据来源：飞书知识库 · 每日自动更新 ·
-        <a href="https://github.com/liuyx339-oss/gzu-wellness-qa" target="_blank" rel="noopener">GitHub</a>
-      </p>
-    </footer>
+  <!-- 添加知识面板 -->
+  <div class="overlay hidden" id="addOverlay">
+    <div class="overlay-card">
+      <h3>📝 添加知识</h3>
+      <p class="settings-desc">提交后约 1 分钟所有人可搜索到</p>
+      <div class="tabs">
+        <button class="tab active" data-tab="qa">Q&A</button>
+        <button class="tab" data-tab="text">自由文本</button>
+      </div>
+      <div class="tab-content" id="tab-qa">
+        <label>问题</label><input type="text" id="addQuestion">
+        <label>答案</label><textarea id="addAnswer" rows="4"></textarea>
+      </div>
+      <div class="tab-content hidden" id="tab-text">
+        <label>标题</label><input type="text" id="addTitle">
+        <label>内容</label><textarea id="addContent" rows="5"></textarea>
+      </div>
+      <div class="overlay-actions">
+        <button class="btn-save" id="btnAddSave">📤 提交</button>
+        <button class="btn-close" id="btnCloseAdd">✕ 关闭</button>
+      </div>
+      <p class="add-status" id="addStatus"></p>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
