@@ -47,6 +47,29 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: bash scripts/sync.sh
 
+      - name: 🔒 强制从MD源文件重建chunks.json(防乱码)
+        run: |
+          node -e "
+          const fs = require('fs'), path = require('path');
+          const dir = 'data/docs';
+          if(!fs.existsSync(dir)) process.exit(0);
+          const files = fs.readdirSync(dir).filter(f=>f.endsWith('.md')).sort();
+          const chunks = []; let id = 0;
+          files.forEach(file => {
+            const text = fs.readFileSync(path.join(dir,file),'utf-8');
+            const sections = text.split(/\\n(?=## )/);
+            sections.forEach(sec => {
+              sec = sec.trim();
+              if(sec.length > 30) chunks.push({id:id++,title:file.replace('.md',''),content:sec.substring(0,2500),tokens_est:Math.floor(sec.length/2)});
+            });
+          });
+          fs.writeFileSync('data/chunks.json', JSON.stringify(chunks,null,2), 'utf-8');
+          const v = JSON.parse(fs.readFileSync('data/chunks.json','utf-8'));
+          const good = v.filter(c=>/[\\u4e00-\\u9fff]/.test(c.content)).length;
+          if(good < v.length * 0.5) throw new Error('chunks.json 中文异常: '+good+'/'+v.length);
+          console.log('chunks.json rebuilt: '+v.length+' chunks, chinese OK: '+good);
+          "
+
       - name: Commit & Push changes
         run: |
           git config user.name "github-actions[bot]"
