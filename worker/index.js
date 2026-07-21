@@ -1,37 +1,39 @@
 /**
  * GZU Wellness AI 知识库问答 + 客户追踪 — Cloudflare Worker
+ * 知识库内嵌，不依赖GitHub
  */
-// AI 提供商配置
+import EMBEDDED_CHUNKS from './chunks-data.js';
+
 const AI_PROVIDER = 'deepseek';
 const DEEPSEEK_API = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-chat';
 const OPENAI_API = 'https://api.openai.com/v1/chat/completions';
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
-
-// GitHub 配置
 const GITHUB_OWNER = 'liuyx339-oss';
 const GITHUB_REPO = 'gzu-wellness-qa';
 const GITHUB_FILE = 'data/chunks.json';
 const CLIENT_RECORDS_FILE = 'data/client_records.json';
 const RAW_BASE = 'https://raw.githubusercontent.com';
-
-// 公共 CORS headers
 const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json; charset=utf-8' };
-
-// 检索参数
 const TOP_K = 5;
 const MAX_CONTEXT = 8000;
 
+// 运行时知识库（启动时从内嵌数据初始化，永不过期）
+let runtimeChunks = [...EMBEDDED_CHUNKS];
+
+// 客户记录缓存
+let clientCache = null, clientCacheTime = 0;
+const CACHE_TTL = 60 * 1000;
+
 // ============================================================
-// 同义词 + 关键词
+// 搜索
 // ============================================================
 const SYNONYM_MAP = {
-  '打针': '能量针 静脉输注 IV营养疗法','打营养针': '能量针 IV营养疗法','打点滴': '静脉输注 IV营养疗法',
-  '喝酒': '酒精 肝脏 解毒 护肝','应酬': '肝脏 酒精 护肝 解毒','美白': '谷胱甘肽 维C 提亮 肤色',
-  '累': '疲劳 乏力 精力差 能量','肝': '肝脏 护肝 解毒 肝功能','失眠': '深眠 磁疗 rTMS 睡眠质量',
-  '老': '抗衰老 抗衰 衰老 年轻','免疫力差': '免疫力 免疫强化 抵抗力', '多少钱': '价格 费用 定价',
+  '打针':'能量针 静脉输注 IV营养疗法','喝酒':'酒精 肝脏 解毒 护肝','应酬':'肝脏 酒精 护肝 解毒',
+  '美白':'谷胱甘肽 维C 提亮 肤色','累':'疲劳 乏力 精力差 能量','肝':'肝脏 护肝 解毒 肝功能',
+  '失眠':'深眠 磁疗 rTMS 睡眠质量','老':'抗衰老 抗衰 衰老 年轻','免疫力差':'免疫力 免疫强化 抵抗力',
+  '多少钱':'价格 费用 定价',
 };
-
 const KEYWORD_WEIGHTS = {
   'nad+':3,'nad':2,'能量针':2.5,'vitaglow':3,'proboost':3,'coreboost':3,'hydromax':3,
   'menergy':3,'微压氧':2.5,'深眠':2.5,'价格':1.5,'套餐':1.5,'免疫':2,'肝脏':2,'谷胱甘肽':2,
@@ -53,6 +55,11 @@ function extractKeywords(text) {
   return [...tokens];
 }
 
+function jaccardSimilarity(sa,sb) {
+  let inter=0; for (const t of sa) if (sb.has(t)) inter++;
+  return (sa.size+sb.size-inter)===0?0:inter/(sa.size+sb.size-inter);
+}
+
 function keywordScore(qt,cc,ct) {
   const comb = (ct+' '+cc).toLowerCase(); let s=0;
   for (const[k,w] of Object.entries(KEYWORD_WEIGHTS)) { if (comb.includes(k) && qt.includes(k)) s+=w; }
@@ -61,11 +68,6 @@ function keywordScore(qt,cc,ct) {
   const ch = qt.replace(/[^一-龥]+/g,'');
   for (let len=4;len>=2;len--) for (let i=0;i<=ch.length-len;i++) { if(comb.includes(ch.substring(i,i+len))) s+=len*0.8; }
   return s;
-}
-
-function jaccardSimilarity(sa,sb) {
-  let inter=0; for (const t of sa) if (sb.has(t)) inter++;
-  return (sa.size+sb.size-inter)===0?0:inter/(sa.size+sb.size-inter);
 }
 
 function searchChunks(question, chunks, topK = TOP_K) {
@@ -87,7 +89,7 @@ function buildSystemPrompt(contextChunks) {
 
 async function callDeepSeek(apiKey, systemPrompt, question) {
   const resp = await fetch(DEEPSEEK_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},body:JSON.stringify({model:DEEPSEEK_MODEL,messages:[{role:'system',content:systemPrompt},{role:'user',content:question}],temperature:0.5,max_tokens:2000})});
-  if (!resp.ok) throw new Error(`DeepSeek: ${resp.status} ${await resp.text()}`);
+  if (!resp.ok) throw new Error(`DeepSeek: ${resp.status}`);
   return (await resp.json()).choices[0].message.content;
 }
 
@@ -98,11 +100,7 @@ async function callOpenAI(apiKey,systemPrompt,question) {
 }
 
 async function callAnthropic(apiKey,systemPrompt,question) {
-  const resp = await fetch(ANTHROPIC_API,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
-    body:JSON.stringify({model:'claude-sonnet-5',max_tokens:2000,system:systemPrompt,messages:[{role:'user',content:question}]})
-  });
+  const resp = await fetch(ANTHROPIC_API,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-5',max_tokens:2000,system:systemPrompt,messages:[{role:'user',content:question}]})});
   if (!resp.ok) throw new Error('Anthropic: '+resp.status);
   return (await resp.json()).content[0].text;
 }
@@ -114,24 +112,8 @@ async function generateAnswer(apiKey, provider, systemPrompt, question) {
 }
 
 // ============================================================
-// 缓存
+// 客户记录
 // ============================================================
-let chunksCache=null, chunksCacheTime=0;
-let clientCache=null, clientCacheTime=0;
-const CACHE_TTL = 60*1000; // 1分钟
-
-async function loadJSON(env, key, cache, timeKey, envUrl) {
-  const now = Date.now();
-  if (cache && (now-timeKey)<CACHE_TTL) return cache;
-  const url = env[envUrl] || env.CHUNKS_URL || `${RAW_BASE}/${GITHUB_OWNER}/${GITHUB_REPO}/master/${key==='chunks'?GITHUB_FILE:CLIENT_RECORDS_FILE}`;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`加载 ${key} 失败: ${resp.status}`);
-  const data = await resp.json();
-  if (key==='chunks') { chunksCache=data; chunksCacheTime=now; } else { clientCache=data; clientCacheTime=now; }
-  return data;
-}
-
-async function getChunks(env) { return loadJSON(env,'chunks',chunksCache,chunksCacheTime,'CHUNKS_URL'); }
 async function getClientRecords(env) {
   const now=Date.now();
   if(clientCache&&(now-clientCacheTime)<CACHE_TTL) return clientCache;
@@ -144,9 +126,19 @@ async function getClientRecords(env) {
 }
 
 // ============================================================
-// GitHub 写入
+// GitHub 写入（UTF-8 安全）
 // ============================================================
-async function appendChunkToGitHub(env, chunk) {
+function stringToBase64(str) {
+  const encoder = new TextEncoder();
+  const bytes = encoder.encode(str);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+async function syncChunkToGitHub(env, chunk) {
   const token = env.GITHUB_PAT;
   if (!token) throw new Error('GitHub PAT 未配置');
   const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
@@ -156,17 +148,9 @@ async function appendChunkToGitHub(env, chunk) {
   const content = JSON.parse(atob(fd.content));
   const maxId = content.reduce((m,c)=>Math.max(m,c.id||0),0);
   chunk.id = maxId+1; content.push(chunk);
-  const newContent = JSON.stringify(content,null,2);
-  // UTF-8 safe base64 encoding
-  const encoder = new TextEncoder();
-  const bytes = encoder.encode(newContent);
-  let b64 = '';
-  for (let i = 0; i < bytes.length; i += 4096) {
-    b64 += btoa(String.fromCharCode(...bytes.subarray(i, i + 4096)));
-  }
+  const b64 = stringToBase64(JSON.stringify(content,null,2));
   const putResp = await fetch(apiUrl,{method:'PUT',headers:{Authorization:`Bearer ${token}`,'User-Agent':'gzu-qa'},body:JSON.stringify({message:`Add: ${(chunk.title||'新内容').substring(0,50)}`,content:b64,sha:fd.sha})});
-  if (!putResp.ok) throw new Error(`GitHub PUT: ${putResp.status} ${await putResp.text()}`);
-  chunksCache=null; chunksCacheTime=0; return chunk;
+  if (!putResp.ok) { const e = await putResp.text(); throw new Error(`GitHub PUT: ${putResp.status} ${e}`); }
 }
 
 // ============================================================
@@ -180,9 +164,8 @@ export default {
     // /api/ai-check
     if (url.pathname==='/api/ai-check') {
       try {
-        const r = await env.AI.run('@cf/meta/llama-3.2-1b-instruct',{messages:[{role:'user',content:'hi'}],max_tokens:3});
-        return Response.json({ok:true,ai:'OK'},{headers:corsHeaders});
-      } catch(e) { return Response.json({ok:false,error:e.message},cors(corsHeaders,500)); }
+        return Response.json({ok:true,chunks:runtimeChunks.length,embedded:true},{headers:corsHeaders});
+      } catch(e) { return Response.json({error:e.message},{status:500,headers:corsHeaders}); }
     }
 
     // /api/speech
@@ -224,8 +207,13 @@ export default {
           if (!c) return Response.json({error:'请提供content'},{status:400,headers:corsHeaders});
           chunk={title:body.title||'user_用户添加',content:c.substring(0,5000),tokens_est:Math.floor(c.length/2)};
         }
-        await appendChunkToGitHub(env,chunk);
-        return Response.json({ok:true,message:'已添加，约1分钟后可搜索到'},{headers:corsHeaders});
+        // 1. 立即更新内存（立即可搜索）
+        const maxId = runtimeChunks.reduce((m,c)=>Math.max(m,c.id||0),0);
+        chunk.id = maxId+1;
+        runtimeChunks.push(chunk);
+        // 2. 异步写入GitHub（持久化）
+        ctx.waitUntil(syncChunkToGitHub(env, chunk).catch(e => console.error('GitHub sync error:', e)));
+        return Response.json({ok:true,message:'已添加，立即可搜索'},{headers:corsHeaders});
       } catch(e) { return Response.json({error:e.message},{status:500,headers:corsHeaders}); }
     }
 
@@ -240,8 +228,7 @@ export default {
       const apiKey = body.apiKey||env.AI_API_KEY;
       const provider = body.provider||env.AI_PROVIDER||AI_PROVIDER;
       if (!apiKey) return Response.json({error:'请点击⚙️设置配置API Key'},{status:401,headers:corsHeaders});
-      const chunks = await getChunks(env);
-      const relevant = searchChunks(question,chunks);
+      const relevant = searchChunks(question,runtimeChunks);
       let ctxChunks=[],totalLen=0;
       for (const item of relevant) { if (totalLen+item.chunk.content.length>MAX_CONTEXT) break; ctxChunks.push(item); totalLen+=item.chunk.content.length; }
       if (!ctxChunks.length) return Response.json({answer:'暂无相关信息，建议联系GZU Wellness获取最新信息',sources:[],question},{headers:corsHeaders});
