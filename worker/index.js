@@ -157,7 +157,14 @@ async function appendChunkToGitHub(env, chunk) {
   const maxId = content.reduce((m,c)=>Math.max(m,c.id||0),0);
   chunk.id = maxId+1; content.push(chunk);
   const newContent = JSON.stringify(content,null,2);
-  const putResp = await fetch(apiUrl,{method:'PUT',headers:{Authorization:`Bearer ${token}`,'User-Agent':'gzu-qa'},body:JSON.stringify({message:`Add: ${(chunk.title||'新内容').substring(0,50)}`,content:btoa(unescape(encodeURIComponent(newContent))),sha:fd.sha})});
+  // UTF-8 safe base64 encoding
+  const encoder = new TextEncoder();
+  const bytes = encoder.encode(newContent);
+  let b64 = '';
+  for (let i = 0; i < bytes.length; i += 4096) {
+    b64 += btoa(String.fromCharCode(...bytes.subarray(i, i + 4096)));
+  }
+  const putResp = await fetch(apiUrl,{method:'PUT',headers:{Authorization:`Bearer ${token}`,'User-Agent':'gzu-qa'},body:JSON.stringify({message:`Add: ${(chunk.title||'新内容').substring(0,50)}`,content:b64,sha:fd.sha})});
   if (!putResp.ok) throw new Error(`GitHub PUT: ${putResp.status} ${await putResp.text()}`);
   chunksCache=null; chunksCacheTime=0; return chunk;
 }
