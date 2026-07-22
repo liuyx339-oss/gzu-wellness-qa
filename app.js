@@ -159,15 +159,20 @@ function renderClientResults(data){
     recs.forEach(r=>{
       // Clean remark
       const remark=(r.remark||'').replace(/<前端备注>/g,'').replace(/<ORE>/g,'').replace(/<商城E码>/g,'').trim();
+      const name = r.name || r.fullName || '';
+      const title = r.gender ? `${escapeHtml(name)} · ${escapeHtml(r.gender)} ${escapeHtml(r.age||'')}` : escapeHtml(name);
       html+=`<div class="client-card">
-        <div class="cmrn">🏥 MRN: ${escapeHtml(mrn)}${r.name?` <span style="color:var(--text-secondary);font-size:13px">(${escapeHtml(r.name)})</span>`:''}</div>
+        <div class="cmrn">🏥 MRN: ${escapeHtml(mrn)}${title?` <span style="color:var(--text-secondary);font-size:13px">(${title})</span>`:''}</div>
         <div class="cinfo">
-          <span class="lbl">任务:</span><span class="val">${escapeHtml(r.task||'—')}</span>
-          <span class="lbl">科室:</span><span class="val">${escapeHtml(r.dept||'—')}</span>
-          <span class="lbl">项目:</span><span class="val">${escapeHtml(r.wellness||'—')}</span>
-          <span class="lbl">日期:</span><span class="val">${escapeHtml(r.date||'—')}</span>
-          <span class="lbl">房间:</span><span class="val">${escapeHtml(r.room||'—')}</span>
-          <span class="lbl">状态:</span><span class="val">${escapeHtml(r.status||'—')} ${escapeHtml(r.billStatus||'')}</span>
+          ${r.task?`<span class="lbl">任务:</span><span class="val">${escapeHtml(r.task)}</span>`:''}
+          ${r.dept?`<span class="lbl">科室:</span><span class="val">${escapeHtml(r.dept)}</span>`:''}
+          ${r.wellness?`<span class="lbl">项目:</span><span class="val">${escapeHtml(r.wellness)}</span>`:''}
+          ${r.date?`<span class="lbl">日期:</span><span class="val">${escapeHtml(r.date)}</span>`:''}
+          ${r.room?`<span class="lbl">房间:</span><span class="val">${escapeHtml(r.room)}</span>`:''}
+          ${r.status?`<span class="lbl">状态:</span><span class="val">${escapeHtml(r.status)} ${escapeHtml(r.billStatus||'')}</span>`:''}
+          ${r.source?`<span class="lbl">渠道:</span><span class="val">${escapeHtml(r.source)}</span>`:''}
+          ${r.consumption?`<span class="lbl">消费:</span><span class="val">${escapeHtml(r.consumption)}</span>`:''}
+          ${r.packages?`<span class="lbl">套餐:</span><span class="val">${escapeHtml(r.packages)}</span>`:''}
           ${r.specialNote?`<span class="lbl">特殊:</span><span class="val" style="color:#dc2626">${escapeHtml(r.specialNote)}</span>`:''}
         </div>
         ${remark?`<div class="cremark">📝 ${escapeHtml(remark)}</div>`:''}

@@ -13,6 +13,7 @@ const GITHUB_OWNER = 'liuyx339-oss';
 const GITHUB_REPO = 'gzu-wellness-qa';
 const GITHUB_FILE = 'data/chunks.json';
 const CLIENT_RECORDS_FILE = 'data/client_records.json';
+const CLIENT_SOURCE2_FILE = 'data/client_records_source2.json';
 const RAW_BASE = 'https://raw.githubusercontent.com';
 const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json; charset=utf-8' };
 const TOP_K = 5;
@@ -21,8 +22,9 @@ const MAX_CONTEXT = 8000;
 // 运行时知识库（启动时从内嵌数据初始化，永不过期）
 let runtimeChunks = [...EMBEDDED_CHUNKS];
 
-// 客户记录缓存
+// 客户记录缓存（两个来源）
 let clientCache = null, clientCacheTime = 0;
+let clientCache2 = null, clientCacheTime2 = 0;
 const CACHE_TTL = 60 * 1000;
 
 // ============================================================
@@ -125,6 +127,17 @@ async function getClientRecords(env) {
   return clientCache;
 }
 
+async function getClientRecords2(env) {
+  const now=Date.now();
+  if(clientCache2&&(now-clientCacheTime2)<CACHE_TTL) return clientCache2;
+  const url = `${RAW_BASE}/${GITHUB_OWNER}/${GITHUB_REPO}/master/${CLIENT_SOURCE2_FILE}`;
+  const resp = await fetch(url);
+  if(!resp.ok) throw new Error('加载客户记录2失败: '+resp.status);
+  clientCache2 = await resp.json();
+  clientCacheTime2 = now;
+  return clientCache2;
+}
+
 // ============================================================
 // GitHub 写入（UTF-8 安全）
 // ============================================================
@@ -187,9 +200,15 @@ export default {
       try {
         const mrn = url.searchParams.get('mrn')?.trim() || '';
         if (!mrn) return Response.json({error:'请提供MRN'},{status:400,headers:corsHeaders});
-        const all = await getClientRecords(env);
-        const matches = all.filter(r => r.mrn && r.mrn.includes(mrn)).slice(0,20);
-        return Response.json({count:matches.length, records:matches, mrn},{headers:corsHeaders});
+        const [all1, all2] = await Promise.all([
+          getClientRecords(env).catch(() => []),
+          getClientRecords2(env).catch(() => []),
+        ]);
+        const matches = [
+          ...all1.filter(r => r.mrn && r.mrn.includes(mrn)),
+          ...all2.filter(r => r.mrn && r.mrn.includes(mrn)),
+        ].slice(0, 30);
+        return Response.json({count:matches.length, records:matches, mrn, sources:2},{headers:corsHeaders});
       } catch(e) { return Response.json({error:e.message},{status:500,headers:corsHeaders}); }
     }
 

@@ -1,0 +1,50 @@
+[
+  {
+    "mrn": "2248927",
+    "source": "",
+    "gender": "女",
+    "consumption": "PPR 基础套餐(2026-07-18)",
+    "age": "42",
+    "dept": "PPR",
+    "fullName": "CHEN XIAN HUA",
+    "packages": "PPR 基础套餐",
+    "remark": "",
+    "name": "陈贤桦"
+  },
+  {
+    "mrn": "2752025",
+    "source": "",
+    "gender": "女",
+    "consumption": "",
+    "age": "37",
+    "dept": "PPR",
+    "fullName": "CHEN Rong Rong",
+    "packages": "",
+    "remark": "",
+    "name": "陈榕榕"
+  },
+  {
+    "mrn": "2666593",
+    "source": "内部引流（科室定向转介）",
+    "gender": "男",
+    "consumption": "",
+    "age": "",
+    "dept": "Wellness",
+    "fullName": "XU JI CHENG",
+    "packages": "",
+    "remark": "减重中心转介",
+    "name": "徐集成"
+  },
+  {
+    "mrn": "2816235",
+    "source": "PPR",
+    "gender": "女",
+    "consumption": "",
+    "age": "",
+    "dept": "Wellness",
+    "fullName": "PENG FANG",
+    "packages": "",
+    "remark": "Lawrence ",
+    "name": "彭芳"
+  }
+]
