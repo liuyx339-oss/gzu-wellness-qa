@@ -95,11 +95,14 @@ document.querySelectorAll('.example').forEach(el=>el.addEventListener('click',()
 async function handleAsk(){
   const q=questionInput.value.trim(); if(!q) return;
   const{apiKey,provider}=loadConfig();
-  if(!apiKey){ openSettings(); renderError(q,'请先配置API Key'); return; }
+  // 后端已配置统一 API Key（env.AI_API_KEY），前端无需强制配置；
+  // 若个人配置了则优先用个人的，否则用后端的
   questionInput.value='';questionInput.style.height='auto';askBtn.disabled=true;
   emptyState.classList.add('hidden');loading.classList.remove('hidden');
   try{
-    const resp=await fetch(`${WORKER_URL}/api/ask`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,apiKey,provider})});
+    const body={question:q,provider};
+    if(apiKey) body.apiKey=apiKey;
+    const resp=await fetch(`${WORKER_URL}/api/ask`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const data=await resp.json();
     if(!resp.ok) throw new Error(data.error||'请求失败');
     renderAnswer(q,data);
