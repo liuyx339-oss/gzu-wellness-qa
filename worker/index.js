@@ -9,6 +9,8 @@ const DEEPSEEK_API = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-chat';
 const OPENAI_API = 'https://api.openai.com/v1/chat/completions';
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
+const ZHIPU_API = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+const ZHIPU_MODEL = 'glm-4-flash';
 const GITHUB_OWNER = 'liuyx339-oss';
 const GITHUB_REPO = 'gzu-wellness-qa';
 const GITHUB_FILE = 'data/chunks.json';
@@ -107,9 +109,17 @@ async function callAnthropic(apiKey,systemPrompt,question) {
   return (await resp.json()).content[0].text;
 }
 
+async function callZhipu(apiKey,systemPrompt,question) {
+  const resp = await fetch(ZHIPU_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},body:JSON.stringify({model:ZHIPU_MODEL,messages:[{role:'system',content:systemPrompt},{role:'user',content:question}],temperature:0.5,max_tokens:2000})});
+  if (!resp.ok) { const t = await resp.text(); throw new Error('智谱: '+resp.status+' '+t.slice(0,200)); }
+  const data = await resp.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
 async function generateAnswer(apiKey, provider, systemPrompt, question) {
   if (provider==='deepseek') return callDeepSeek(apiKey,systemPrompt,question);
   if (provider==='anthropic') return callAnthropic(apiKey,systemPrompt,question);
+  if (provider==='zhipu') return callZhipu(apiKey,systemPrompt,question);
   return callOpenAI(apiKey,systemPrompt,question);
 }
 
@@ -244,9 +254,13 @@ export default {
       const body = await request.json();
       const question = body.question?.trim();
       if (!question) return Response.json({error:'请提供question'},{status:400,headers:corsHeaders});
-      const apiKey = body.apiKey||env.AI_API_KEY;
       const provider = body.provider||env.AI_PROVIDER||AI_PROVIDER;
-      if (!apiKey) return Response.json({error:'请点击⚙️设置配置API Key'},{status:401,headers:corsHeaders});
+      let apiKey = body.apiKey;
+      if (!apiKey) {
+        if (provider==='zhipu') apiKey = env.ZHIPU_API_KEY;
+        else apiKey = env.AI_API_KEY;
+      }
+      if (!apiKey) return Response.json({error:'后端未配置 API Key'},{status:401,headers:corsHeaders});
       const relevant = searchChunks(question,runtimeChunks);
       let ctxChunks=[],totalLen=0;
       for (const item of relevant) { if (totalLen+item.chunk.content.length>MAX_CONTEXT) break; ctxChunks.push(item); totalLen+=item.chunk.content.length; }
