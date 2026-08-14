@@ -1,8 +1,20 @@
 /**
  * Wellness 知识问答库 — 双栏应用
+ * 直接调用智谱 GLM-4-Flash（绕开 Cloudflare Worker，避免 workers.dev 访问问题）
  */
 const WORKER_URL = 'https://gzu-wellness-qa.gzu-wellness.workers.dev';
 const STORAGE_KEY = 'gzu_wellness_qa_config';
+
+// 智谱 API 配置（前端直连，key 会暴露在代码中，内部使用可接受）
+const ZHIPU_API = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+const ZHIPU_KEY = 'a5306355d63b4d4a9116481d48c40c5c.a9dUs3caFqK8TUPh';
+const ZHIPU_MODEL = 'glm-4-flash';
+
+const SYSTEM_PROMPT = '你是 GZU Wellness（和睦家医疗健康中心）的专业客服助手。' +
+  '你了解的产品包括：IV Drip 静脉输注（NAD+、Vitaglow肝净、Coreboost核心活力、Coretein白蛋白、Hydromax水合修复、Menergy男性健康、Neurogenex脑活素、Proboost进阶等）、' +
+  '精准检测（全外显子组基因测序、全套维生素、免疫时钟、皮肤基因、端粒检测、菌群移植评估、原力评估、女性/男性解码等）、' +
+  '设备干预（微压氧舱、体外反搏、深眠磁疗rTMS等）。' +
+  '请专业、温暖地回答客户问题，用中文，适当使用 emoji。如果不确定具体价格或细节，建议客户联系官方确认。';
 
 // ===== Config =====
 function loadConfig() { try { const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):{}; }catch{return{};} }
@@ -94,18 +106,14 @@ document.querySelectorAll('.example').forEach(el=>el.addEventListener('click',()
 
 async function handleAsk(){
   const q=questionInput.value.trim(); if(!q) return;
-  const{apiKey,provider}=loadConfig();
-  // 后端已配置统一 API Key（env.AI_API_KEY），前端无需强制配置；
-  // 若个人配置了则优先用个人的，否则用后端的
   questionInput.value='';questionInput.style.height='auto';askBtn.disabled=true;
   emptyState.classList.add('hidden');loading.classList.remove('hidden');
   try{
-    const body={question:q,provider};
-    if(apiKey) body.apiKey=apiKey;
-    const resp=await fetch(`${WORKER_URL}/api/ask`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    // 直接调用智谱 API（绕开 Worker）
+    const resp=await fetch(ZHIPU_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+ZHIPU_KEY},body:JSON.stringify({model:ZHIPU_MODEL,messages:[{role:'system',content:SYSTEM_PROMPT},{role:'user',content:q}],temperature:0.5,max_tokens:2000})});
     const data=await resp.json();
-    if(!resp.ok) throw new Error(data.error||'请求失败');
-    renderAnswer(q,data);
+    if(!resp.ok) throw new Error(data.error?.message || '请求失败');
+    renderAnswer(q,{answer:data.choices?.[0]?.message?.content || '无回答'});
   }catch(e){renderError(q,e.message);}
   finally{loading.classList.add('hidden');askBtn.disabled=false;questionInput.focus();}
 }
